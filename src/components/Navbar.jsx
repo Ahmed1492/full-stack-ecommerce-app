@@ -39,7 +39,7 @@ export default function Navbar() {
           </div>
           {/* RIGHT */}
           <div className=" w-2/3">
-            <div className="flex  items-center justify-end  gap-3">
+            <div className="flex items-center justify-end gap-3">
               {/* INPUT */}
               <SearchInput />
               {/* ICONS */}
