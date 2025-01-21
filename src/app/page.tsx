@@ -1,7 +1,10 @@
+import HomeSlider from "@/components/HomeSlider";
 const HomePage = () => {
   return (
-    <div className=''>HomePage</div>
-  )
-}
+    <div className="">
+      <HomeSlider />
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;

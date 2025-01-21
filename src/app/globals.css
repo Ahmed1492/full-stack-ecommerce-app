@@ -5,3 +5,7 @@
 /* nextjs-portal {
   display: none !important;
 } */
+
+.customHeight {
+  height: calc(100vh - 104px) !important;
+}
