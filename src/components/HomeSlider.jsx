@@ -46,20 +46,20 @@ export default function HomeSlider() {
     console.log(currentSlide);
   };
 
-  useEffect(() => {
-    const sliderInterval = setInterval(() => {
-      if (currentSlide === slider.length - 1) {
-        setCurrentSlide(0);
-        console.log("first");
-      } else {
-        setCurrentSlide(currentSlide + 1);
-        console.log("second");
-        console.log(currentSlide);
-      }
-    }, 3000);
+  // useEffect(() => {
+  //   const sliderInterval = setInterval(() => {
+  //     if (currentSlide === slider.length - 1) {
+  //       setCurrentSlide(0);
+  //       console.log("first");
+  //     } else {
+  //       setCurrentSlide(currentSlide + 1);
+  //       console.log("second");
+  //       console.log(currentSlide);
+  //     }
+  //   }, 3000);
 
-    return () => clearInterval(sliderInterval);
-  }, [currentSlide]);
+  //   return () => clearInterval(sliderInterval);
+  // }, [currentSlide]);
   return (
     <div className="overflow-x-hidden w-screen   flex customHeight">
       <div className={`w-max h-full flex `}>
