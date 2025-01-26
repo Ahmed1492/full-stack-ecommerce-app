@@ -5,7 +5,7 @@ import NavIcons from "@/components/NavIcons";
 import Image from "next/image";
 export default function Navbar() {
   return (
-    <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-4 ">
+    <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-[10%] pt-4 ">
       <div className="md:flex flex-wrap    items-center gap-9">
         {/*MOBILE SCREAN  */}
         <div className=" flex items-center justify-between h-full md:hidden">
