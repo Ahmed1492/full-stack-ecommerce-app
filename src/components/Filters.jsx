@@ -19,9 +19,9 @@ export default function Filters() {
 
   return (
     <div className="mt-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrdap gap-y-6 items-center justify-between">
         {/* LEFT */}
-        <div className="flex gap-5 items-center">
+        <div className="flex flex-wrap gap-5 items-center">
           <DropDownMenue
             isOpen={openMenuType === "Type"}
             onToggleMenu={() => handleToggleMenu("Type")}
@@ -64,12 +64,14 @@ export default function Filters() {
           />
         </div>
         {/* RIGHT */}
+        <div className="self-start">
         <DropDownMenue
           isOpen={openMenuType === "SortBy"}
           onToggleMenu={() => handleToggleMenu("SortBy")}
           filterBy={sizes}
           type="SortBy"
         />
+        </div>
       </div>
     </div>
   );

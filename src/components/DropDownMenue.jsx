@@ -16,6 +16,7 @@ export default function DropDownMenue({
     console.log("Type:", type, ", Selected Option:", option);
   };
 
+  filterBy = [type, ...filterBy];
   const handleOpenMenue = () => {
     setIsOpenMenue((prev) => !prev);
   };
@@ -30,18 +31,20 @@ export default function DropDownMenue({
         onClick={onToggleMenu}
       >
         <button className="text-sm">{selectedOption || type}</button>
-        <Image src="/drowpdown.png" alt="" width={12} height={12} />
+        <button>
+          <Image src="/drowpdown.png" alt="" width={12} height={12} />
+        </button>
       </div>
       {isOpen && (
         <div
-          className="bg-[#636363] absolute z-50 shadow-lg flex w-56 px-1 flex-col gap-3 py-4 justify-center items-center rounded-lg"
+          className="bg-[#636363] absolute z-50 shadow-lg flex w-56 px-1 flex-col gap-1 py-4 justify-center items-center rounded-lg"
           role="menu"
           aria-hidden={!isOpenMenue}
         >
           {filterBy.map((type) => (
             <span
               onClick={() => handleSelect(type)}
-              className="cursor-pointer w-full pe-4 text-sm ps-2 py-1 self-start hover:bg-[#77C463] rounded-lg text-white"
+              className="cursor-pointer w-full pe-4 text-sm duration-300 ease-in-out ps-2 py-1 self-start hover:bg-[#77C463] rounded-lg text-white"
               role="menuitem"
               key={type}
             >
