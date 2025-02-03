@@ -1,8 +1,16 @@
+import { wixClientServer } from "@/lib/wixClientServer";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function ProductList() {
+export default async function ProductList({ categoryId, limit }) {
+  const wixClient = await wixClientServer();
+  const res = await wixClient.products
+    .queryProducts()
+    .limit(limit || 20)
+    .find();
+  console.log(res.items);
+
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">
       <Link
