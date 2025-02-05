@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-
     loader: "default",
-    domains: ["res.cloudinary.com"],
-
     remotePatterns: [
       {
         protocol: "https",
@@ -20,9 +17,13 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com",
+        hostname: "img.freepik.com",
       },
-    ]
+      {
+        protocol: "https",
+        hostname: "static.wixstatic.com", // ✅ Added Wix Static
+      },
+    ],
   },
 };
 
