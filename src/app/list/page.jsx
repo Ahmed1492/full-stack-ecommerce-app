@@ -1,8 +1,16 @@
 import Image from "next/image";
 import ProductList from "@/components/ProductList";
 import Filters from "@/components/Filters";
+import { wixClientServer } from "@/lib/wixClientServer";
+import { Suspense } from "react";
 
-export default function SingleCategory() {
+export default async function SingleCategory({ searchParams }) {
+  const wixClient = await wixClientServer();
+  const cat = await wixClient.collections.getCollectionBySlug(
+    searchParams.cat || "all-products"
+  );
+  console.log(cat);
+
   return (
     <div className="px-[10%] mt-5">
       {/* TOP */}
@@ -31,7 +39,14 @@ export default function SingleCategory() {
       <Filters />
       {/* PRODUCT LIST */}
       <h2 className="text-xl font-bold my-8">All Products for You!</h2>
-      <ProductList />
+      <Suspense fallback={"Loading.."}>
+        <ProductList
+          categoryId={
+            cat.collection._id || "00000000-000000-000000-000000000001"
+          }
+          searchParams={searchParams}
+        />
+      </Suspense>
     </div>
   );
 }

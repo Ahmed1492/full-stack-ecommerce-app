@@ -4,14 +4,14 @@ import Link from "next/link";
 import React from "react";
 import DOMPurify from "isomorphic-dompurify";
 
-export default async function ProductList({ categoryId, limit }) {
+export default async function ProductList({ categoryId, limit, searchParams }) {
   const wixClient = await wixClientServer();
-  const res = await wixClient.products
+  const res = await wixClient?.products
     .queryProducts()
     .eq("collectionIds", categoryId)
     .limit(limit || 20)
     .find();
-  // console.log(res.items);
+  console.log(res.items);
 
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">

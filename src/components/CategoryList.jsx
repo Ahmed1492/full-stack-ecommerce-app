@@ -15,7 +15,7 @@ export default async function CategoryList() {
         return (
           <Link
             key={index}
-            href="/list"
+            href={`/list?cat=${item.slug}`}
             className="w-[20rem] flex-shrink-0 flex-col  h-max"
           >
             {/* IMAGE */}
