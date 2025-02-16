@@ -65,12 +65,12 @@ export default function Filters() {
         </div>
         {/* RIGHT */}
         <div className="self-start">
-        <DropDownMenue
-          isOpen={openMenuType === "SortBy"}
-          onToggleMenu={() => handleToggleMenu("SortBy")}
-          filterBy={sizes}
-          type="SortBy"
-        />
+          <DropDownMenue
+            isOpen={openMenuType === "SortBy"}
+            onToggleMenu={() => handleToggleMenu("SortBy")}
+            filterBy={sizes}
+            type="SortBy"
+          />
         </div>
       </div>
     </div>
