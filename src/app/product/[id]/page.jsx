@@ -53,12 +53,19 @@ export default async function SingleProduct({ params }) {
             </div>
           )}
           <div className="h-[2px] bg-gray-100" />
-          <CustomizeProduct
-            productId={product?._id}
-            variants={product?.variants}
-            productOptions={product?.productOptions}
-          />
-          <AddProduct />
+          {product.variants && product.productOptions ? (
+            <CustomizeProduct
+              productId={product?._id}
+              variants={product?.variants}
+              productOptions={product?.productOptions}
+            />
+          ) : (
+            <AddProduct
+              productId={product?._id}
+              variantId="00000000-0000-0000-0000-000000000000"
+              stockNumber={product.stock.quantity || 0}
+            />
+          )}
           <div className="h-[2px] bg-gray-100" />
           {/* REVIEWS */}
           <div className="flex flex-col gap-8">

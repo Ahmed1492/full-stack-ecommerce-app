@@ -2,12 +2,21 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import DropDownMenue from "@/components/DropDownMenue";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 export default function Filters() {
   const [isOpenMenue, setIsOpenMenue] = useState(false);
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
 
-  const types = ["option 01", "option 02", "option 03"];
-  const sizes = ["lg", "md", "sm"];
+  const types = ["Physical", "Digital", "option 03"];
+  const sizes = [
+    "price (low to high)",
+    "price (high to low)",
+    "Newest",
+    "Oldest",
+  ];
   const colors = ["red", "green", "blue"];
   const category = ["cat 01", "cat 02", "cat 03"];
   const filters = ["filter 01 ", "filter 02", "filter 03"];
@@ -17,12 +26,31 @@ export default function Filters() {
     setOpenMenuType((prev) => (prev === type ? null : type)); // Toggle or close
   };
 
+  const handleFilterChange = (type, option) => {
+    if (type == "SortBy") {
+      if (option === "price (low to high)") {
+        option = "asc price";
+      } else if (option === "price (high to low)") {
+        option = "desc price";
+      } else if (option === "Newest") {
+        option = "asc lastUpdated";
+      } else if (option === "Oldest") {
+        option = "desc lastUpdated";
+      }
+    }
+    const params = new URLSearchParams(searchParams);
+    params.set(type, option);
+    replace(`${pathName}?${params.toString()}`);
+    console.log("Type:>>", type, ", Selected Option:", option);
+  };
+
   return (
     <div className="mt-5">
       <div className="flex flex-wrdap gap-y-6 items-center justify-between">
         {/* LEFT */}
         <div className="flex flex-wrap gap-5 items-center">
           <DropDownMenue
+            handleFilterChange={handleFilterChange}
             isOpen={openMenuType === "Type"}
             onToggleMenu={() => handleToggleMenu("Type")}
             filterBy={types}
@@ -32,31 +60,37 @@ export default function Filters() {
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
             placeholder="Max Price "
+            onChange={(e) => handleFilterChange("max-price", e.target.value)}
           />
           <input
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
             placeholder="Min Price "
+            onChange={(e) => handleFilterChange("min-price", e.target.value)}
           />
-          <DropDownMenue
+          {/* <DropDownMenue
+          handleFilterChange ={handleFilterChange}
             isOpen={openMenuType === "Size"}
             onToggleMenu={() => handleToggleMenu("Size")}
             filterBy={sizes}
             type="Size"
           />
           <DropDownMenue
+          handleFilterChange ={handleFilterChange}
             isOpen={openMenuType === "Color"}
             onToggleMenu={() => handleToggleMenu("Color")}
             filterBy={colors}
             type="Color"
-          />
+          /> */}
           <DropDownMenue
+            handleFilterChange={handleFilterChange}
             isOpen={openMenuType === "Category"}
             onToggleMenu={() => handleToggleMenu("Category")}
             filterBy={category}
             type="Category"
           />
           <DropDownMenue
+            handleFilterChange={handleFilterChange}
             isOpen={openMenuType === "AllFilters"}
             onToggleMenu={() => handleToggleMenu("AllFilters")}
             filterBy={filters}
@@ -66,6 +100,7 @@ export default function Filters() {
         {/* RIGHT */}
         <div className="self-start">
           <DropDownMenue
+            handleFilterChange={handleFilterChange}
             isOpen={openMenuType === "SortBy"}
             onToggleMenu={() => handleToggleMenu("SortBy")}
             filterBy={sizes}

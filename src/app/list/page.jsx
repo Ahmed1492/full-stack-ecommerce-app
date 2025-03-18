@@ -6,7 +6,7 @@ import { Suspense } from "react";
 
 export default async function SingleCategory({ searchParams }) {
   const wixClient = await wixClientServer();
-  const cat = await wixClient.collections.getCollectionBySlug(
+  const cat = await wixClient?.collections?.getCollectionBySlug(
     searchParams.cat || "all-products"
   );
   console.log(cat);

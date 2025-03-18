@@ -1,7 +1,6 @@
 "use client";
-
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import AddProduct from "./AddProduct";
 export default function CustomizeProduct({
   productId,
   variants,
@@ -9,13 +8,16 @@ export default function CustomizeProduct({
 }) {
   // console.log(productOptions);
   const [selectedOption, setSelectedOption] = useState({});
+  const [selectedVariant, setSelectedVarient] = useState();
+  const [quantity, setQuantity] = useState(0);
+
   const handleOptionSelect = (optionType, choice, disable) => {
     if (!disable) {
       setSelectedOption((prev) => ({ ...prev, [optionType]: choice }));
-
       console.log("selectedOption ", selectedOption);
       console.log("choice ", choice);
     }
+    setQuantity(0);
   };
   // console.log(variants);
   const isVariantsInStock = (choices) => {
@@ -23,14 +25,25 @@ export default function CustomizeProduct({
       const variantChoices = variant.choices;
       if (!variantChoices) return false;
       return (
+        variant.stock &&
+        variant.stock.inStock &&
+        variant.stock.quantity > 0 &&
         Object.entries(choices).every(
-          ([key, value]) => variantChoices[key] === value
-        ) &&
-        variant.stock?.inStock &&
-        variant?.stock?.quantity > 0
+          ([key, value]) => variant.choices?.[key] === value
+        )
       );
     });
   };
+  useEffect(() => {
+    const varient = variants.find((v) => {
+      const varientChoice = v.choices;
+      if (!varientChoice) return false;
+      return Object.entries(selectedOption).every(
+        ([key, value]) => varientChoice[key] == value
+      );
+    });
+    setSelectedVarient(varient);
+  }, [selectedOption, variants]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -110,17 +123,16 @@ export default function CustomizeProduct({
         ))}
       </div>
       {/* COLORS / */}
-
-      {/* SIZES */}
-      {/* <h3 className="font-medium text-xl">Choose a Size </h3>
- 
-        <button className=" border border-red-600 px-[10px] w-24 text-center font-medium py-[8px] text-red-700 rounded-xl">
-          Medium
-        </button>
-        <button className="bg-[#EB306F] px-[10px] w-24 text-center font-medium py-[8px] text-white rounded-xl">
-          Small
-        </button>
-      </div> */}
+      <AddProduct
+        quantity={quantity}
+        setQuantity={setQuantity}
+        productId={productId}
+        variantId={
+          selectedVariant?._id || "00000000-0000-0000-0000-000000000000"
+        }
+        stockNumber={selectedVariant?.stock?.quantity || 0}
+      />
+      {console.log("selectedVariant :  ", selectedVariant)}
     </div>
   );
 }

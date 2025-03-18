@@ -12,6 +12,7 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
     .limit(limit || 20)
     .find();
   // console.log(res.items);
+  console.log("searchParams ", searchParams);
 
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">

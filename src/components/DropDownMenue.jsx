@@ -7,13 +7,14 @@ export default function DropDownMenue({
   type,
   isOpen,
   onToggleMenu,
+  handleFilterChange
 }) {
   const [isOpenMenue, setIsOpenMenue] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const handleSelect = (option) => {
     setSelectedOption(option);
     onToggleMenu(); // Close the menu after selecting
-    console.log("Type:", type, ", Selected Option:", option);
+    handleFilterChange(type , option)
   };
 
   filterBy = [type, ...filterBy];
@@ -37,7 +38,8 @@ export default function DropDownMenue({
       </div>
       {isOpen && (
         <div
-          className="bg-[#636363] absolute z-50 shadow-lg flex w-56 px-1 flex-col gap-1 py-4 justify-center items-center rounded-lg"
+        onChange={handleFilterChange}
+          className="bg-[#636363] absolute z-50 shadow-lg flex w-[12rem] px-1 flex-col gap-1 py-3 justify-center items-center rounded-lg"
           role="menu"
           aria-hidden={!isOpenMenue}
         >
@@ -48,7 +50,7 @@ export default function DropDownMenue({
               role="menuitem"
               key={type}
             >
-              {type}
+              {type} 
             </span>
           ))}
         </div>
