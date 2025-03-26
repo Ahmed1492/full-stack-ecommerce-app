@@ -35,11 +35,16 @@ export default function AddProduct({
                 <span>{quantity}</span>
                 <button onClick={handleIncrease}>+</button>
               </div>
-              <div className="text-sm">
-                Only <span className="text-[#b54f46]">{stockNumber} items</span>{" "}
-                left! <br />
-                Dont miss it
-              </div>
+              {stockNumber < 1 ? (
+                <div className="text-sm">Product Is Out Of Stock</div>
+              ) : (
+                <div className="text-sm">
+                  Only{" "}
+                  <span className="text-[#b54f46]">{stockNumber} items</span>{" "}
+                  left! <br />
+                  Dont miss it
+                </div>
+              )}
             </div>
           </div>
           <button className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl">

@@ -59,15 +59,16 @@ export default function Filters() {
           <input
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
-            placeholder="Max Price "
-            onChange={(e) => handleFilterChange("max-price", e.target.value)}
+            placeholder="Min Price "
+            onChange={(e) => handleFilterChange("min", e.target.value)}
           />
           <input
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
-            placeholder="Min Price "
-            onChange={(e) => handleFilterChange("min-price", e.target.value)}
+            placeholder="Max Price "
+            onChange={(e) => handleFilterChange("max", e.target.value)}
           />
+
           {/* <DropDownMenue
           handleFilterChange ={handleFilterChange}
             isOpen={openMenuType === "Size"}

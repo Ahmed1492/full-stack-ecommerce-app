@@ -1,6 +1,7 @@
 import Image from "next/image";
 import ProductList from "@/components/ProductList";
 import Filters from "@/components/Filters";
+import Pagination from "@/components/Pagination";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { Suspense } from "react";
 
