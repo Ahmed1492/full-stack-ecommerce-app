@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ShoppingProductList from "@/components/ShoppingProductList";
+import { useWixClient } from "@/hooks/useWixClient";
 export default function NavIcons() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -21,6 +22,17 @@ export default function NavIcons() {
     setIsProfileOpen(false);
     setIsCartOpen((prev) => !prev);
   };
+
+  // AUTH WITH WIX-MANAGED AUTH
+  const wixClient = useWixClient();
+  // const login = async () => {
+  //   const loginRequestData = wixClient.auth.generateOAuthData(
+  //     "http://localhost:3000"
+  //   );
+  //   localStorage.setItem("oAuthRedirectData", JSON.stringify(loginRequestData));
+  //   const { authUrl } = await wixClient.auth.getAuthUrl(loginRequestData);
+  //   window.location.href = authUrl;
+  // };
   return (
     <div className="flex items-center  gap-6">
       <div className="relative min-w-9 ">
@@ -30,7 +42,8 @@ export default function NavIcons() {
           alt=""
           width={22}
           height={22}
-          onClick={handleProfile}
+          onClick={handleProfile} 
+          // onClick={login}
         />
         {isProfileOpen && (
           <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
