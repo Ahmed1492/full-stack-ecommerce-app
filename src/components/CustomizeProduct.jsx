@@ -5,6 +5,7 @@ export default function CustomizeProduct({
   productId,
   variants,
   productOptions,
+  stockNumber,
 }) {
   // console.log(productOptions);
   const [selectedOption, setSelectedOption] = useState({});
@@ -47,81 +48,86 @@ export default function CustomizeProduct({
 
   return (
     <div className="flex flex-col gap-5">
-      {/* COLORS */}
-      <div className="flex flex-col gap-5">
-        {productOptions.map((option, index) => (
-          <div className="flex flex-col gap-2" key={index}>
-            <h3 className="font-medium text-xl">Choose a {option.name} </h3>
-            <div className="flex gap-2">
-              {option?.choices.map((choice, index) => {
-                const disable = !isVariantsInStock({
-                  ...selectedOption,
-                  [option.name]: choice.description,
-                });
-                const selected =
-                  selectedOption[option.name] === choice.description;
-                return option.name == "Color" ? (
-                  <div
-                    onClick={() =>
-                      handleOptionSelect(
-                        option.name,
-                        choice.description,
-                        disable
-                      )
-                    }
-                    key={index}
-                    className="flex mt-2 gap-2"
-                  >
+      {stockNumber < 1 ? (
+        ""
+      ) : (
+        <div className="flex flex-col gap-5">
+          {productOptions.map((option, index) => (
+            <div className="flex flex-col gap-2" key={index}>
+              <h3 className="font-medium text-xl">Choose a {option.name} </h3>
+              <div className="flex gap-2">
+                {option?.choices.map((choice, index) => {
+                  const disable = !isVariantsInStock({
+                    ...selectedOption,
+                    [option.name]: choice.description,
+                  });
+                  const selected =
+                    selectedOption[option.name] === choice.description;
+                  return option.name == "Color" ? (
                     <div
-                      className={` border ${
-                        selected ? "ring-2 ring-blue-400 " : ""
-                      }   flex justify-center cursor-pointer items-center rounded-full w-11 h-11 relative`}
+                      onClick={() =>
+                        handleOptionSelect(
+                          option.name,
+                          choice.description,
+                          disable
+                        )
+                      }
+                      key={index}
+                      className="flex mt-2 gap-2"
                     >
-                      <span
+                      <div
+                        className={` border ${
+                          selected ? "ring-2 ring-blue-400 " : ""
+                        }   flex justify-center cursor-pointer items-center rounded-full w-11 h-11 relative`}
+                      >
+                        <span
+                          style={{
+                            backgroundColor: choice.description,
+                            cursor: disable ? "not-allowed" : "pointer",
+                          }}
+                          className=" w-9 h-9  rounded-full"
+                        ></span>
+                        {disable && (
+                          <span className="w-1 h-14 absolute rounded-2xl bg-red-400  -rotate-45" />
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() =>
+                        handleOptionSelect(
+                          option.name,
+                          choice.description,
+                          disable
+                        )
+                      }
+                      key={index}
+                      className="flex  items-center gap-3"
+                    >
+                      <button
+                        className={` px-[10px] border w-24 text-center font-medium py-[8px] text-white rounded-xl`}
                         style={{
-                          backgroundColor: choice.description,
+                          backgroundColor: selected
+                            ? "#f35c7a"
+                            : disable
+                            ? "#FBCFE8"
+                            : "white",
+                          color: selected || disable ? "white" : "#f35c7a",
                           cursor: disable ? "not-allowed" : "pointer",
                         }}
-                        className=" w-9 h-9  rounded-full"
-                      ></span>
-                      {disable && (
-                        <span className="w-1 h-14 absolute rounded-2xl bg-red-400  -rotate-45" />
-                      )}
+                      >
+                        {choice.value}
+                      </button>
                     </div>
-                  </div>
-                ) : (
-                  <div
-                    onClick={() =>
-                      handleOptionSelect(
-                        option.name,
-                        choice.description,
-                        disable
-                      )
-                    }
-                    key={index}
-                    className="flex  items-center gap-3"
-                  >
-                    <button
-                      className={` px-[10px] border w-24 text-center font-medium py-[8px] text-white rounded-xl`}
-                      style={{
-                        backgroundColor: selected
-                          ? "#f35c7a"
-                          : disable
-                          ? "#FBCFE8"
-                          : "white",
-                        color: selected || disable ? "white" : "#f35c7a",
-                        cursor: disable ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {choice.value}
-                    </button>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+      {/* COLORS */}
+
       {/* COLORS / */}
       <AddProduct
         quantity={quantity}

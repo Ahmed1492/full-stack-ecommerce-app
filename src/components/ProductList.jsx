@@ -14,7 +14,7 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
     .eq("collectionIds", categoryId)
     .hasSome(
       "productType",
-      searchParams?.type ? searchParams?.type : ["physical", "digital"]
+      searchParams?.Type ? searchParams?.Type : ["physical", "digital"]
     )
     .gt("priceData.price", searchParams?.min || 0)
     .lt("priceData.price", searchParams?.max || 999999)
@@ -24,8 +24,6 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
         ? parseInt(searchParams.page) * (limit || productPerPage)
         : 0
     );
-
-  // console.log("searchParams ", searchParams);
 
   if (searchParams?.SortBy) {
     const [sortType, sortBy] = searchParams.SortBy.split(" ");
@@ -38,8 +36,14 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
   }
 
   const res = await productQuery.find(); // Ensure sorting is applied before calling `.find()`
+  // console.log("====================================");
+  // console.log("res new  : ", res);
+  // console.log("====================================");
 
-  console.log("res : ", res);
+  if (res.items.length == 0) {
+    return <div>No Items To Show</div>;
+  }
+
 
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">

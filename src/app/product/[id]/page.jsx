@@ -58,6 +58,7 @@ export default async function SingleProduct({ params }) {
               productId={product?._id}
               variants={product?.variants}
               productOptions={product?.productOptions}
+              stockNumber={product.stock.quantity || 0}
             />
           ) : (
             <AddProduct

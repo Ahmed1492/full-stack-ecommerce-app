@@ -4,13 +4,23 @@ import Filters from "@/components/Filters";
 import Pagination from "@/components/Pagination";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 export default async function SingleCategory({ searchParams }) {
-  const wixClient = await wixClientServer();
-  const cat = await wixClient?.collections?.getCollectionBySlug(
-    searchParams.cat || "all-products"
-  );
-  console.log(cat);
+  let cat;
+  let error = false;
+  try {
+    const wixClient = await wixClientServer();
+    error = false;
+    cat = await wixClient?.collections?.getCollectionBySlug(
+      searchParams?.cat || "all-products"
+    );
+  } catch (error) {
+    console.log("====================================");
+    console.log("error", error);
+    console.log("====================================");
+    if (error) return notFound();
+  }
 
   return (
     <div className="px-[10%] mt-5">
@@ -39,11 +49,13 @@ export default async function SingleCategory({ searchParams }) {
       {/* FILTERS */}
       <Filters />
       {/* PRODUCT LIST */}
-      <h2 className="text-xl font-bold my-8">All Products for You!</h2>
+      <h2 className="text-xl font-bold my-8">
+        {cat?.collection?.name} For You!
+      </h2>
       <Suspense fallback={"Loading.."}>
         <ProductList
           categoryId={
-            cat.collection._id || "00000000-000000-000000-000000000001"
+            cat?.collection?._id || "00000000-000000-000000-000000000001"
           }
           searchParams={searchParams}
         />

@@ -10,7 +10,7 @@ export default function Filters() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const types = ["Physical", "Digital", "option 03"];
+  const types = ["physical", "digital", "option 03"];
   const sizes = [
     "price (low to high)",
     "price (high to low)",
@@ -18,7 +18,7 @@ export default function Filters() {
     "Oldest",
   ];
   const colors = ["red", "green", "blue"];
-  const category = ["cat 01", "cat 02", "cat 03"];
+  const category = ["all-products", "cat 02", "cat 03"];
   const filters = ["filter 01 ", "filter 02", "filter 03"];
   const [openMenuType, setOpenMenuType] = useState(null); // Track the open dropdown by type
 
@@ -41,7 +41,7 @@ export default function Filters() {
     const params = new URLSearchParams(searchParams);
     params.set(type, option);
     replace(`${pathName}?${params.toString()}`);
-    console.log("Type:>>", type, ", Selected Option:", option);
+    // console.log("Type:>>", type, ", Selected Option:", option);
   };
 
   return (
@@ -88,7 +88,7 @@ export default function Filters() {
             isOpen={openMenuType === "Category"}
             onToggleMenu={() => handleToggleMenu("Category")}
             filterBy={category}
-            type="Category"
+            type="cat"
           />
           <DropDownMenue
             handleFilterChange={handleFilterChange}

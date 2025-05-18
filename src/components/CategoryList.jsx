@@ -4,9 +4,13 @@ import Link from "next/link";
 
 export default async function CategoryList() {
   const wixClient = await wixClientServer();
-  let cats = await wixClient.collections?.queryCollections().find();
+  let cats = await wixClient?.collections?.queryCollections().find();
   // console.log("cat>>>", cats);
   cats.items[0].media.mainMedia.image.url = process.env.PRODUCT_CAT;
+
+  function cleanString(str) {
+    return str.toLowerCase().replace(/-/g, "");
+  }
   return (
     <div className="p-4 flex items-center gap-3 overflow-x-scroll scrollbar-hidden">
       {cats?.items?.map((item, index) => {
@@ -30,7 +34,7 @@ export default async function CategoryList() {
                 />
               )}
             </div>
-            <span className="font-medium">{item.name}</span>
+            <span className="font-medium">{cleanString(item.name)}</span>
           </Link>
         );
       })}
