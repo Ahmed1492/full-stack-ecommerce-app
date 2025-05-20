@@ -1,27 +1,32 @@
 "use client";
 
+import { useCartStore } from "@/hooks/userCartStore";
+import { useWixClient } from "@/hooks/useWixClient";
 import { useState } from "react";
 
 export default function AddProduct({
   productId,
   variantId,
   stockNumber,
-  quantity,
-  setQuantity,
+  // quantity,
+  // setQuantity,
 }) {
-  // const [quantity, setQuantity] = useState(0);
+  const wixClient = useWixClient();
+
+  const [quantity, setQuantity] = useState(1);
   const handleIncrease = () => {
     if (quantity < stockNumber) {
       setQuantity((prev) => prev + 1);
     }
   };
-  console.log("stockNumber ", stockNumber);
 
   const handleDecrease = () => {
-    if (quantity !== 0) {
+    if (quantity !== 1) {
       setQuantity((prev) => prev - 1);
     }
   };
+
+  const { addItem } = useCartStore();
   return (
     <div className="flex flex-col gap-5">
       {stockNumber < 1 ? (
@@ -34,12 +39,11 @@ export default function AddProduct({
             <div className="flex items-center justify-between w-[95%]">
               <div className="flex flex-col gap-5 items-center">
                 <div className="flex items-center gap-8">
-                  <div className="bg-gray-100 rounded-3xl px-[17px] py-[10px] text-lg flex items-center gap-10  ">
+                  <div className="bg-gray-100 rounded-3xl px-[17px] py-[10px] text-lg flex items-center gap-10 select-none">
                     <button onClick={handleDecrease}>-</button>
                     <span>{quantity}</span>
                     <button onClick={handleIncrease}>+</button>
                   </div>
-
                   <div className="text-sm">
                     Only{" "}
                     <span className="text-[#b54f46]">{stockNumber} items</span>{" "}
@@ -48,7 +52,12 @@ export default function AddProduct({
                   </div>
                 </div>
               </div>
-              <button className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl">
+              <button
+                onClick={() =>
+                  addItem(wixClient, productId, variantId, quantity)
+                }
+                className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl"
+              >
                 Add To Cart
               </button>
             </div>

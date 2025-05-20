@@ -1,33 +1,64 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ShoppingProductList from "@/components/ShoppingProductList";
 import { useWixClient } from "@/hooks/useWixClient";
+import Cookies from "js-cookie";
+import { useCartStore } from "@/hooks/userCartStore";
 export default function NavIcons() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const wixClient = useWixClient();
 
   let isLoggedIn = wixClient.auth.loggedIn();
 
+  const pathName = usePathname();
+  // console.log("====================================");
+  // console.log("pathName ", pathName);
+  // console.log("====================================");
   const handleProfile = () => {
-    setIsCartOpen(false);
-    if (!isLoggedIn) {
-      router.push("/login");
-    } else {
+    if (pathName === "/") {
+      setIsCartOpen(false);
+
       setIsProfileOpen((prev) => !prev);
+    } else {
+      router.push("/login");
     }
   };
+
   const handleCart = () => {
     setIsProfileOpen(false);
     setIsCartOpen((prev) => !prev);
   };
+  const handleLogOut = async () => {
+    Cookies.remove("refreshToken");
+    setIsLoading(true);
+
+    try {
+      // const { logOut } = await wixClient.auth.logout(window.location.href);
+      router.push("/login");
+      // router.push(logOut);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await setIsLoading(false);
+      await setIsProfileOpen(false);
+    }
+  };
+
+  const { getCart, counter, cart } = useCartStore();
+  const getCart2 = async () => {
+    getCart(wixClient);
+  };
+
   useEffect(() => {
-    // handleProfile();
-  }, [isLoggedIn]);
+    console.log("cart ", cart);
+    getCart(wixClient);
+  }, [getCart]);
 
   return (
     <div className="flex items-center  gap-6">
@@ -38,13 +69,15 @@ export default function NavIcons() {
           alt=""
           width={22}
           height={22}
-          // onClick={handleProfile}
+          onClick={handleProfile}
           // onClick={login}
         />
         {isProfileOpen && (
           <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
             <Link href="/">Profile</Link>
-            <span>LogOut</span>
+            <span onClick={handleLogOut} className="cursor-pointer ">
+              {isLoading ? "loading..." : "LogOut"}
+            </span>
           </div>
         )}
       </div>
@@ -67,7 +100,7 @@ export default function NavIcons() {
           onClick={handleCart}
         />
         <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-sm text-white">
-          2
+          {counter}
         </span>
         {isCartOpen && (
           <div className="flex flex-col gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
