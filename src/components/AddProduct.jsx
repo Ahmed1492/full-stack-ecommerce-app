@@ -1,5 +1,6 @@
 "use client";
 
+import { useWixClient } from "@/hooks/useWixClient";
 import { useState } from "react";
 
 export default function AddProduct({
@@ -9,6 +10,23 @@ export default function AddProduct({
   quantity,
   setQuantity,
 }) {
+  const wixClient = useWixClient();
+  const addItem = async () => {
+    console.log("productId ", productId);
+    console.log("variantId ", variantId);
+    const response = await wixClient.currentCart.addToCurrentCart({
+      lineItems: [
+        {
+          catalogReference: {
+            appId: process.env.NEXT_PUBLIC_WIX_APP_ID,
+            catalogItemId: productId,
+            ...(variantId && { options: { variantId } }),
+          },
+          quantity: stockNumber,
+        },
+      ],
+    });
+  };
   // const [quantity, setQuantity] = useState(0);
   const handleIncrease = () => {
     if (quantity < stockNumber) {
@@ -48,7 +66,10 @@ export default function AddProduct({
                   </div>
                 </div>
               </div>
-              <button className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl">
+              <button
+                onClick={addItem}
+                className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl"
+              >
                 Add To Cart
               </button>
             </div>

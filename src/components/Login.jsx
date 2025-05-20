@@ -3,6 +3,7 @@ export default function Login({
   handleSubmit,
   setEmail,
   setPassword,
+  isLoading,
 }) {
   return (
     <div>
@@ -32,8 +33,12 @@ export default function Login({
         <u onClick={() => setMode("resetPassword")} className="cursor-pointer">
           Forgot Password
         </u>
-        <button className="bg-[#D02E64] text-white py-2 rounded-lg mt-7">
-          Login
+        <button
+          className={`${
+            isLoading ? "bg-[#DFA3B7]" : "bg-[#D02E64]"
+          } text-white py-2 rounded-lg mt-7`}
+        >
+          {isLoading ? "Loading...." : " Login"}
         </button>
         <u onClick={() => setMode("register")} className="mt-2 cursor-pointer">
           {"Don't"} Have An Account

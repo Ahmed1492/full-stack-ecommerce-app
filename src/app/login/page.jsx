@@ -32,7 +32,7 @@ export default function LoginPage() {
       let response;
       switch (mode) {
         case "login":
-          response = await wixClient.auth.login({
+          response = await wixClient?.auth.login({
             email,
             password,
           });
@@ -53,7 +53,7 @@ export default function LoginPage() {
           });
           break;
         case "emailCode":
-          response = await wixClient.auth.processVerification({
+          response = await wixClient?.auth?.processVerification({
             verificationCode: emailCode,
           });
           break;
@@ -61,7 +61,7 @@ export default function LoginPage() {
         default:
           break;
       }
-      console.log("MyResponse : ", response);
+      // console.log("MyResponse : ", response);
 
       switch (response?.loginState) {
         case LoginState?.SUCCESS:
@@ -77,16 +77,29 @@ export default function LoginPage() {
             expires: 2,
           });
           router.push("/");
-          console.log("tokens ", tokens);
+          // console.log("tokens ", tokens);
 
           break;
 
+        case LoginState?.FAILURE:
+          if (
+            response?.errorCode === "invalidEmail" ||
+            response?.errorCode === "invalidPassword"
+          )
+            setError("Invalid Email or Password!");
+          else if (response?.errorCode === "emailAlreadyExists")
+            setError("IUser Email Is Already Exist!");
+          else if (response?.errorCode === "resetPassword")
+            setMessage("Reset Your Password");
+          else {
+            setError("Some Thing Went Wrong!");
+          }
         default:
           break;
       }
     } catch (error) {
       console.log("Some Thing Went Wrong..! ");
-      console.log(error);
+      // console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -100,6 +113,8 @@ export default function LoginPage() {
           setEmail={setEmail}
           setPassword={setPassword}
           setMode={setMode}
+          isLoading={isLoading}
+          error={error}
         />
       )}
       {mode == "register" && (
