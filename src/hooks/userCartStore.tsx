@@ -24,8 +24,12 @@ type CartState = {
     variantId: string,
     quantity: number
   ) => Promise<void>;
+<<<<<<< HEAD
 
   removeItem: (itemId: string, wixClient: WixClientType) => Promise<void>;
+=======
+  removeItem: (itemId: string) => Promise<void>;
+>>>>>>> 71c62a656cc034351775fce1b829d4cf6aee78a2
 };
 
 export const useCartStore = create<CartState>((set) => ({
@@ -43,6 +47,7 @@ export const useCartStore = create<CartState>((set) => ({
   },
 
   addItem: async (wixClient, productId, variantId, quantity) => {
+<<<<<<< HEAD
     set((state) => ({ ...state, isLoading: true }));
     const response = await wixClient.currentCart.addToCurrentCart({
       lineItems: [
@@ -115,5 +120,36 @@ export const useCartStore = create<CartState>((set) => ({
       console.error("Error removing item from cart:", error);
       set((state) => ({ ...state, isLoading: false }));
     }
+=======
+    // // Add item to cart via wixClient API
+    // await wixClient.currentCart.addLineItem({
+    //   productId,
+    //   variantId,
+    //   quantity,
+    // });
+
+    // Refresh cart after adding
+    const updatedCart = await wixClient.currentCart.getCurrentCart();
+    set({
+      cart: updatedCart || ({} as currentCart.Cart),
+      counter: updatedCart?.lineItems?.length || 0,
+    });
+  },
+
+  removeItem: async (itemId) => {
+    // Assuming you have access to wixClient here or passed similarly
+    // You might need to change signature to pass wixClient here as well
+    // Example signature change:
+    // removeItem: async (wixClient: WixClientType, itemId: string) => { ... }
+    // For demo, assume wixClient is globally accessible or passed somehow
+    // Replace with actual implementation
+    // await wixClient.currentCart.removeLineItem(itemId);
+    // Refresh cart after removing
+    // const updatedCart = await wixClient.currentCart.getCurrentCart();
+    // set({
+    //   cart: updatedCart || ({} as currentCart.Cart),
+    //   counter: updatedCart?.lineItems?.length || 0,
+    // });
+>>>>>>> 71c62a656cc034351775fce1b829d4cf6aee78a2
   },
 }));
