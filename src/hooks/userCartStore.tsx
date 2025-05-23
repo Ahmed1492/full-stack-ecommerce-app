@@ -65,55 +65,32 @@ export const useCartStore = create<CartState>((set) => ({
     });
   },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   removeItem: async (wixClient, itemId) => {
-    set((state) => ({ ...state, isLoading: true }));
+    set({ isLoading: true });
 
     if (!wixClient || !wixClient.currentCart) {
       console.error("Invalid wixClient or currentCart is undefined");
-      set((state) => ({ ...state, isLoading: false }));
+      set({ isLoading: false });
       return;
     }
 
     try {
       const response =
         await wixClient.currentCart.removeLineItemsFromCurrentCart([itemId]);
-      console.log("Removed item response:", response);
 
-      if (response?.cart?.lineItems) {
+      if (response?.cart) {
         set({
           cart: response.cart,
-          counter: response.cart.lineItems.length,
+          counter: response.cart.lineItems?.length || 0,
           isLoading: false,
         });
       } else {
-        set((state) => ({ ...state, isLoading: false }));
+        console.warn("No cart returned in removeItem response");
+        set({ isLoading: false });
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
-      set((state) => ({ ...state, isLoading: false }));
+      set({ isLoading: false });
     }
   },
 }));
