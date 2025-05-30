@@ -61,7 +61,6 @@ export default function LoginPage() {
         default:
           break;
       }
-      // console.log("MyResponse : ", response);
 
       switch (response?.loginState) {
         case LoginState?.SUCCESS:

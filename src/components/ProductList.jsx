@@ -35,7 +35,7 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
     }
   }
 
-  const res = await productQuery.find(); // Ensure sorting is applied before calling `.find()`
+  const res = await productQuery?.find(); // Ensure sorting is applied before calling `.find()`
   // console.log("====================================");
   // console.log("res new  : ", res);
   // console.log("====================================");
@@ -44,6 +44,7 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
     return <div>No Items To Show</div>;
   }
 
+  if (!res) return null;
 
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">

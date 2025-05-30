@@ -25,7 +25,6 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
   if (searchParams?.SortBy) {
     const [sortType, sortBy] = searchParams.SortBy.split(" ");
 
-
     if (sortType === "asc") {
       productQuery.ascending(sortBy);
     }
@@ -34,6 +33,18 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
     }
   }
   const res = await productQuery.find();
+
+  const singleOrder = {
+    id: "",
+    allArders: [
+      {
+        productName: productName?.original,
+        quantity: item?.quantity,
+        price: item.price.amount,
+      },
+    ],
+  };
+
   return (
     <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">
       {res.items.map((item, index) => (
