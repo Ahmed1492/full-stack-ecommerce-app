@@ -9,7 +9,7 @@ const UserInfo = () => {
     <div>
       {user ? (
         <div>
-          <p>Welcome</p> {/* ✅ Show correct data */}
+          <p>Welcome</p> 
         </div>
       ) : (
         <p>Loading user...</p>
