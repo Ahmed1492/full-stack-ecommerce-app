@@ -74,7 +74,7 @@ export default function NavIcons() {
         />
         {isProfileOpen && (
           <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
-            <Link href="/">Profile</Link>
+            <Link href="/profile">Profile</Link>
             <span onClick={handleLogOut} className="cursor-pointer ">
               {isLoading ? "loading..." : "LogOut"}
             </span>

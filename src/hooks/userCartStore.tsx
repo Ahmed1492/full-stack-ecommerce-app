@@ -34,12 +34,16 @@ export const useCartStore = create<CartState>((set) => ({
   counter: 0,
 
   getCart: async (wixClient) => {
-    const fetchedCart = await wixClient?.currentCart?.getCurrentCart();
-    set({
-      cart: fetchedCart || ([] as currentCart.Cart),
-      isLoading: false,
-      counter: fetchedCart?.lineItems?.length || 0,
-    });
+    try {
+      const fetchedCart = await wixClient?.currentCart?.getCurrentCart();
+      set({
+        cart: fetchedCart || ([] as currentCart.Cart),
+        isLoading: false,
+        counter: fetchedCart?.lineItems?.length || 0,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   },
 
   addItem: async (wixClient, productId, variantId, quantity) => {

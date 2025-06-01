@@ -1,0 +1,70 @@
+import React from "react";
+
+export default function UpdateUser() {
+  return (
+    <div className="">
+      <form
+        // onSubmit={handleSubmit}
+        className="flex flex-col gap-2 mt-24  m-auto  "
+      >
+        <h1 className="font-extrabold text-2xl">Profile</h1>
+        {/* USER NAME */}
+        <label className="mt-5" htmlFor="">
+          Username
+        </label>
+        <input
+          //onChange={(e) => setUsername(e.target.value)}
+          className="outline-none border w-[100%] py-2 px-3"
+          type="text"
+          placeholder="Enter Your Username"
+        />
+
+        {/* FIRST NAME */}
+
+        <label className="mt-5" htmlFor="">
+          firstname
+        </label>
+        <input
+          //onChange={(e) => setPassword(e.target.value)}
+          className="outline-none border w-[100%] py-2 px-3"
+          type="text"
+          placeholder="Enter Your firstname"
+        />
+
+        {/* FIRST NAME */}
+        <label className="mt-5" htmlFor="">
+          surname
+        </label>
+        <input
+          //onChange={(e) => setPassword(e.target.value)}
+          className="outline-none border w-[100%] py-2 px-3"
+          type="text"
+          placeholder="Enter Your surname"
+        />
+        <label className="mt-5" htmlFor="">
+          Phone
+        </label>
+        <input
+          //onChange={(e) => setPassword(e.target.value)}
+          className="outline-none border w-[100%] py-2 px-3"
+          type="number"
+          placeholder="Enter Your Phone"
+        />
+
+        <label className="mt-5" htmlFor="">
+          Email
+        </label>
+        <input
+          //onChange={(e) => setEmail(e.target.value)}
+          className="outline-none border w-[100%] py-2 px-3"
+          type="email"
+          placeholder="Enter Your Email"
+        />
+
+        <button className="bg-[#D02E64] text-white py-2 rounded-lg mt-7">
+          Update
+        </button>
+      </form>
+    </div>
+  );
+}

@@ -5,7 +5,7 @@ import OrderSummary from "@/components/OrderSummary.jsx";
 import { members } from "@wix/members";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { useCartStore } from "@/hooks/userCartStore";
-
+import axios from "axios";
 export default async function page() {
   const wixClient = await wixClientServer();
   const member = await wixClient.members.getCurrentMember({
