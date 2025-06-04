@@ -3,45 +3,18 @@ import axios from "axios";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Link from "next/link";
-export default async function OrderHistory() {
-  const allHistoryOrders = [
-    {
-      orderId: "sgfa231....",
-      price: "0.00",
-      time: "1 hour age",
-      status: "APPROVED",
-    },
-    {
-      orderId: "sgfa231....",
-      price: "0.00",
-      time: "1 hour age",
-      status: "APPROVED",
-    },
-    {
-      orderId: "sgfa231....",
-      price: "0.00",
-      time: "1 hour age",
-      status: "APPROVED",
-    },
-    {
-      orderId: "sgfa231....",
-      price: "0.00",
-      time: "1 hour age",
-      status: "APPROVED",
-    },
-  ];
+export default async function OrderHistory({ user }) {
   dayjs.extend(relativeTime);
 
-  let userId = "a9d38b31-e2d0-4884-aecc-8d12e1c6c838";
+  // let userId = "a9d38b31-e2d0-4884-aecc-8d12e1c6c838";
+  let userId = user.contactId;
 
   const getUserOrders = async () => {
     try {
       let myResponse = await axios.get(
         `http://localhost:2000/userOrders/${userId}`
       );
-      // console.log("====================================");
-      // console.log(myResponse.data.result);
-      // console.log("====================================");
+
       return myResponse?.data?.result;
     } catch (error) {
       console.log(error);

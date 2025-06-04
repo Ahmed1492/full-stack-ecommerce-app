@@ -19,7 +19,7 @@ export default async function page() {
         {/* <UserInfo /> */}
       </div>
       <div className="w-[100%] md:w-[45%] lg:w-[40%] xl:w-[25rem]">
-        <OrderSummary />
+        <OrderSummary user={member?.member} />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
 import { useMemo } from "react";
 
-const OrderSummary = () => {
+const OrderSummary = ({user}) => {
   const { cart } = useCartStore();
   // let result = getCart();
 

@@ -12,6 +12,8 @@ const CheckoutDetails = ({ user }) => {
     price: 0,
     address: "",
     receiverName: "",
+    firstname: "",
+    lastname: "",
     receiverEmail: user.loginEmail,
     paymentStatus: "pending",
     orderStatus: "processing",
@@ -20,15 +22,20 @@ const CheckoutDetails = ({ user }) => {
   console.log("cart ", cart.lineItems);
 
   const handleCollectData = (e) => {
-    let key = e.target.name;
-    let value = e.target.value;
+    const key = e.target.name;
+    const value = e.target.value;
 
-    let newObj = { ...orderData };
-    newObj[key] = value;
-    setOrderData(newObj);
-    console.log("newObj", newObj);
+    const updatedData = {
+      ...orderData,
+      [key]: value,
+    };
 
-    // myOrderData = { ...newObj };
+    updatedData.receiverName = `${updatedData.firstname || ""} ${
+      updatedData.lastname || ""
+    }`.trim();
+
+    setOrderData(updatedData);
+    console.log("Updated orderData:", updatedData);
   };
 
   const createOrder = async () => {
@@ -118,7 +125,7 @@ const CheckoutDetails = ({ user }) => {
             First name
           </label>
           <input
-            name="receiverName"
+            name="firstname"
             onChange={handleCollectData}
             className=" border border-gray-300  w-[94%] py-2 px-3 rounded-sm"
             type="text"
@@ -131,7 +138,7 @@ const CheckoutDetails = ({ user }) => {
             Last name
           </label>
           <input
-            name="lastName"
+            name="lastname"
             onChange={handleCollectData}
             className=" border border-gray-300  w-[94%] py-2 px-3 rounded-sm"
             type="text"
