@@ -2,9 +2,11 @@
 import { useCartStore } from "@/hooks/userCartStore";
 import axios from "axios";
 import React, { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useWixClient } from "@/hooks/useWixClient";
 
 const CheckoutDetails = ({ user }) => {
-  const { cart } = useCartStore();
+  const { cart , resetCart } = useCartStore();
 
   const [orderData, setOrderData] = useState({
     receiveId: user.contactId,
@@ -38,13 +40,24 @@ const CheckoutDetails = ({ user }) => {
     console.log("Updated orderData:", updatedData);
   };
 
+  const router = useRouter();
+  const goToOrderPage = (orderId) => {
+    router.push(`orders/${orderId}`); // Navigate to another route
+  };
+
   const createOrder = async () => {
     try {
       const response = await axios.post(
         "http://localhost:2000/createOrder",
         orderData
       );
-      console.log(response.data);
+      if (response.data.result) {
+        console.log("====================================");
+        console.log("response.data.result", response.data.result.orderId);
+        let orderId = await response.data.result.orderId;
+        console.log("====================================");
+        return await goToOrderPage(orderId);
+      }
     } catch (error) {
       console.error(
         "Error creating order:",
@@ -74,7 +87,7 @@ const CheckoutDetails = ({ user }) => {
       console.log(error);
     }
   };
-
+let wixClient = useWixClient()
   const handleCheckout = async () => {
     try {
       let userId = user.contactId;
@@ -89,6 +102,8 @@ const CheckoutDetails = ({ user }) => {
       }
       console.log("user Exist we added order only!");
       await createOrder(orderData);
+
+      await resetCart(wixClient)
     } catch (error) {
       console.log(error);
     }

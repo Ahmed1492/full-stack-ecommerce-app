@@ -8,7 +8,7 @@ import jwtDecode from "jwt-decode";
 import Cookies from "js-cookie";
 import { useMemo } from "react";
 
-const OrderSummary = ({user}) => {
+const OrderSummary = ({ user }) => {
   const { cart } = useCartStore();
   // let result = getCart();
 
@@ -20,6 +20,7 @@ const OrderSummary = ({user}) => {
     }, 0);
   }, [cart?.lineItems]);
 
+  if (cart?.lineItems?.length == 0) return <div>no Orders</div>;
   return (
     <div className="bg-slate-200 rounded-md py-2 px-3">
       <div className="flex my-4 items-center border-b-2 border-slate-300   pb-4 justify-between">

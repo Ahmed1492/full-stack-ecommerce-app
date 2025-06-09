@@ -24,6 +24,18 @@ export default async function OrderHistory({ user }) {
   let allOrders = await getUserOrders();
   // console.log(" allOrders", allOrders);
 
+  if (allOrders.length == 0)
+    return (
+      <>
+        <h2 className="text-2xl text-center mb-[2rem] font-semibold ">
+          Orders
+        </h2>
+        <h2 className="text-xl mb-[2rem] text-center font-semibold ">
+          No Orders To Show!
+        </h2>
+      </>
+    );
+
   return (
     <div className="">
       <h2 className="text-2xl mb-[2rem] font-semibold ">Orders</h2>

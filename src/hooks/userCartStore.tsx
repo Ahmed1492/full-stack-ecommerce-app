@@ -1,5 +1,6 @@
 import { WixClientType } from "@/context/wixContext";
 import { cart, currentCart } from "@wix/ecom";
+import { WixClient } from "@wix/sdk";
 import { create } from "zustand";
 
 type CartItem = {
@@ -26,6 +27,7 @@ type CartState = {
   ) => Promise<void>;
 
   removeItem: (itemId: string, wixClient: WixClientType) => Promise<void>;
+  resetCart: (wixClient: WixClientType) => Promise<void>;
 };
 
 export const useCartStore = create<CartState>((set) => ({
@@ -94,6 +96,39 @@ export const useCartStore = create<CartState>((set) => ({
       }
     } catch (error) {
       console.error("Error removing item from cart:", error);
+      set({ isLoading: false });
+    }
+  },
+  resetCart: async (wixClient) => {
+    set({ isLoading: true });
+
+    try {
+      const current = await wixClient?.currentCart?.getCurrentCart();
+
+      const lineItemIds = current?.lineItems
+        ?.map((item) => item._id)
+        .filter(Boolean) as string[];
+
+      if (lineItemIds.length > 0) {
+        const response =
+          await wixClient.currentCart.removeLineItemsFromCurrentCart(
+            lineItemIds
+          );
+
+        set({
+          cart: response.cart,
+          counter: response.cart?.lineItems?.length || 0,
+          isLoading: false,
+        });
+      } else {
+        set({
+          cart: current,
+          counter: 0,
+          isLoading: false,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to reset cart:", error);
       set({ isLoading: false });
     }
   },

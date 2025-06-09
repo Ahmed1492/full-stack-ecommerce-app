@@ -18,6 +18,13 @@ export default async function page({ params }) {
     }
   };
   let orderDetails = await getOrder();
+
+  if (!orderDetails)
+    return (
+      <div>
+        <h2 className="text-2xl text-center mt-[4rem]">not found order!</h2>
+      </div>
+    );
   return (
     <div className="flex flex-col gap-4 mt-[4rem] items-center">
       <h3 className="text-center font-semibold text-2xl">Order Detaisl</h3>
@@ -25,17 +32,17 @@ export default async function page({ params }) {
       <div className="flex flex-col gap-4 text-left justify-start  text-xl font-light   mt-[2rem]   ">
         <span>Order Id :{orderDetails?._id}</span>
         {/* Receiver name */}
-        <span>Receiver name :{orderDetails.receiverName}</span>
+        <span>Receiver name :{orderDetails?.receiverName}</span>
         {/* Receiver Email */}
-        <span>Receiver Email :{orderDetails.receiverEmail}</span>
+        <span>Receiver Email :{orderDetails?.receiverEmail}</span>
         {/* price */}
-        <span>price : {orderDetails.price}</span>
+        <span>price : {orderDetails?.price}</span>
         {/* Payment Status */}
-        <span> Payment Status :{orderDetails.paymentStatus}</span>
+        <span> Payment Status :{orderDetails?.paymentStatus}</span>
         {/* Order Status */}
-        <span> Order Status :{orderDetails.orderStatus}</span>
+        <span> Order Status :{orderDetails?.orderStatus}</span>
         {/* Delivery Address */}
-        <span>Delivery Address :{orderDetails.address}</span>
+        <span>Delivery Address :{orderDetails?.address}</span>
 
         <span
           className="border-b border-black text-lg pb-0 text-gray-800 font-semibold cursor-pointer

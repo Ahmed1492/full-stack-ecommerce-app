@@ -120,9 +120,12 @@ export default function NavIcons() {
                 <button className="bg-white  border-1   border-gray-400 border hover:bg-black hover:text-white  transition-all duration-200 text-sm py-3 px-3 rounded-md">
                   View Cart
                 </button>
-                <button className="bg-black  border text-sm hover:bg-white hover:text-black  transition-all duration-200 text-white py-3 px-3 rounded-md">
+                <Link
+                  href="/checkout"
+                  className="bg-black  border text-sm hover:bg-white hover:text-black  transition-all duration-200 text-white py-3 px-3 rounded-md"
+                >
                   Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </div>
