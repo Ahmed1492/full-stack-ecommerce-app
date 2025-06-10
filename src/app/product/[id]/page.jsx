@@ -3,8 +3,10 @@ import React from "react";
 import ProductImage from "@/components/ProductImage";
 import CustomizeProduct from "@/components/CustomizeProduct";
 import AddProduct from "@/components/AddProduct";
+import Reviwes from "@/components/Reviwes";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { notFound } from "next/navigation";
+import { members } from "@wix/members";
 export default async function SingleProduct({ params }) {
   const wixClient = await wixClientServer();
   let products;
@@ -21,7 +23,9 @@ export default async function SingleProduct({ params }) {
   } catch (error) {
     return notFound();
   }
-
+  const member = await wixClient.members.getCurrentMember({
+    fieldsets: [members.Set.FULL],
+  });
   return (
     <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}
@@ -70,16 +74,7 @@ export default async function SingleProduct({ params }) {
           <div className="h-[2px] bg-gray-100" />
           {/* REVIEWS */}
           <div className="flex flex-col gap-8">
-            {product.additionalInfoSections.map((section) => {
-              // console.log("section", section);
-              if (section.title !== "shortDesc")
-                return (
-                  <div key={section.title} className="flex flex-col gap-2">
-                    <h2 className="text-2xl font-medium">{section.title}</h2>
-                    <p className="tracking-wide">{section.description}</p>
-                  </div>
-                );
-            })}
+            <Reviwes user={member?.member} productId={product?._id} />
           </div>
         </div>
       </div>

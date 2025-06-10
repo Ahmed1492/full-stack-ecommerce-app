@@ -29,7 +29,7 @@ export default async function UpdateUser({ user }) {
         <input
           name="id"
           hidden
-          value={user?.contactId}
+          defaultValue={user?.contactId}
           //onChange={(e) => setUsername(e.target.value)}
           className="outline-none border w-[100%] py-2 px-3"
           type="text"

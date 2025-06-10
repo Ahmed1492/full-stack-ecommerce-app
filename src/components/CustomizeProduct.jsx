@@ -15,8 +15,8 @@ export default function CustomizeProduct({
   const handleOptionSelect = (optionType, choice, disable) => {
     if (!disable) {
       setSelectedOption((prev) => ({ ...prev, [optionType]: choice }));
-      console.log("selectedOption ", selectedOption);
-      console.log("choice ", choice);
+      // console.log("selectedOption ", selectedOption);
+      // console.log("choice ", choice);
     }
     setQuantity(0);
   };
@@ -138,7 +138,7 @@ export default function CustomizeProduct({
         }
         stockNumber={selectedVariant?.stock?.quantity || 0}
       />
-      {console.log("selectedVariant :  ", selectedVariant)}
+      {/* {console.log("selectedVariant :  ", selectedVariant)} */}
     </div>
   );
 }

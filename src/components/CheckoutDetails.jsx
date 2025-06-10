@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { useWixClient } from "@/hooks/useWixClient";
 
 const CheckoutDetails = ({ user }) => {
-  const { cart , resetCart } = useCartStore();
-
+  const { cart, resetCart } = useCartStore();
+  const [isLoading, setLoading] = useState(false);
   const [orderData, setOrderData] = useState({
     receiveId: user.contactId,
     phone: "",
@@ -21,7 +21,7 @@ const CheckoutDetails = ({ user }) => {
     orderStatus: "processing",
   });
   // console.log("user from client ", user);
-  console.log("cart ", cart.lineItems);
+  // console.log("cart ", cart.lineItems);
 
   const handleCollectData = (e) => {
     const key = e.target.name;
@@ -52,10 +52,7 @@ const CheckoutDetails = ({ user }) => {
         orderData
       );
       if (response.data.result) {
-        console.log("====================================");
-        console.log("response.data.result", response.data.result.orderId);
         let orderId = await response.data.result.orderId;
-        console.log("====================================");
         return await goToOrderPage(orderId);
       }
     } catch (error) {
@@ -87,9 +84,10 @@ const CheckoutDetails = ({ user }) => {
       console.log(error);
     }
   };
-let wixClient = useWixClient()
+  let wixClient = useWixClient();
   const handleCheckout = async () => {
     try {
+      setLoading(true);
       let userId = user.contactId;
       const response = await axios.get(`http://localhost:2000/user/${userId}`);
 
@@ -103,9 +101,11 @@ let wixClient = useWixClient()
       console.log("user Exist we added order only!");
       await createOrder(orderData);
 
-      await resetCart(wixClient)
+      await resetCart(wixClient);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -252,7 +252,9 @@ let wixClient = useWixClient()
       </>
       <button
         onClick={handleCheckout}
-        className="bg-black text-white mt-7  w-[94%] py-3 px-3 rounded-sm"
+        className={`${
+          isLoading ? "bg-slate-400 cursor-not-allowed" : "bg-black"
+        } text-white mt-7   w-[94%] py-3 px-3 rounded-md`}
       >
         Continue
       </button>

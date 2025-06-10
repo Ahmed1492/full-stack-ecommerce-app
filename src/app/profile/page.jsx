@@ -9,9 +9,7 @@ export default async function page() {
     fieldsets: [members.Set.FULL],
   });
 
-  console.log("====================================");
   console.log("member ", member.member);
-  console.log("====================================");
   return (
     <div className="flex items-center justify-between w-[80%] mt-3 m-auto">
       <div className="xl:w-[30rem]">

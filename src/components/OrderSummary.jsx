@@ -20,14 +20,15 @@ const OrderSummary = ({ user }) => {
     }, 0);
   }, [cart?.lineItems]);
 
-  if (cart?.lineItems?.length == 0) return <div>no Orders</div>;
+  let cartObj = { ...cart };
+  if (cartObj?.lineItems?.length == 0) return <div>no Orders</div>;
   return (
     <div className="bg-slate-200 rounded-md py-2 px-3">
       <div className="flex my-4 items-center border-b-2 border-slate-300   pb-4 justify-between">
         <h3>Order Summary (1)</h3>
         <button>Edit Cart</button>
       </div>
-      {cart?.lineItems?.map((item) => (
+      {cartObj?.lineItems?.map((item) => (
         <div
           key={item?._id}
           className="flex  gap-7 border-b-2 border-slate-300   pb-4   justify-between "
