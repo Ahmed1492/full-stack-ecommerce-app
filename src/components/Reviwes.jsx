@@ -4,13 +4,21 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function Reviwes({ productId, user }) {
+export default function Reviwes({ productId, user, product }) {
   const [reviwes, setReviews] = useState([]);
+  const [allOrders, setAllOrders] = useState([]);
   const [isShow, setIsShow] = useState(true);
   const [isLoading, setLoading] = useState(false);
+  const [hasOrderItem, setHasOrderItem] = useState(false);
+
+  console.log("====================================");
+  // console.log("productId , ", productId);
+  // console.log("user.contactId , ", user.contactId);
+  console.log("====================================");
+
   const [userD, setUserD] = useState({
     productId: productId,
-    userId: user.contactId,
+    userId: user?.contactId,
   });
   const [newComment, setNewComment] = useState({
     content: "",
@@ -22,8 +30,10 @@ export default function Reviwes({ productId, user }) {
 
   const getReviwes = async () => {
     try {
-      let myResponse = await axios.get("http://localhost:2000/comment");
-      console.log(">>>", myResponse.data.result);
+      let myResponse = await axios.get(
+        `http://localhost:2000/comment/${productId}`
+      );
+      // console.log(">>>", myResponse.data.result);
       setReviews(myResponse.data.result);
     } catch (error) {
       console.log(error);
@@ -42,7 +52,7 @@ export default function Reviwes({ productId, user }) {
       );
       await getReviwes();
       await isUserComment();
-      console.log(myResponse);
+      // console.log(myResponse);
     } catch (error) {
       console.log(error);
     } finally {
@@ -67,9 +77,48 @@ export default function Reviwes({ productId, user }) {
     }
   };
 
+  const getAllReviwes = async () => {
+    try {
+      let myResponse = await axios.get("http://localhost:2000/orders");
+      // console.log("test>>", myResponse.data.order);
+
+      console.log("====================================");
+      console.log("userId", user.contactId);
+      console.log("product", product);
+
+      await hasUserOrderedItem(
+        myResponse.data.order,
+        user.contactId,
+        productId
+      );
+      console.log("====================================");
+      // setAllOrders(myResponse.data.order);
+    } catch (error) {}
+  };
+
+  async function hasUserOrderedItem(orders, userId, itemId) {
+    for (const order of orders) {
+      if (order.receiveId === userId) {
+        for (const item of order.selectedItem) {
+          if (item.id === itemId) {
+            setHasOrderItem(true);
+            console.log("result is ", true);
+
+            return true; // Found a matching order
+          }
+        }
+      }
+    }
+    setHasOrderItem(false);
+
+    console.log("result is ", false);
+    return false; // No match found
+  }
+
   useEffect(() => {
     getReviwes();
     isUserComment();
+    getAllReviwes();
   }, []);
   return (
     <>
@@ -93,7 +142,7 @@ export default function Reviwes({ productId, user }) {
         );
       })}
 
-      {!isShow && (
+      {!isShow && hasOrderItem && (
         <div className="flex justify-center mt-7">
           <input
             onChange={(e) =>

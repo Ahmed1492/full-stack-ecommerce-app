@@ -10,7 +10,7 @@ export default function Filters() {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
 
-  const types = ["physical", "digital", "option 03"];
+  const types = ["physical", "digital"];
   const sizes = [
     "price (low to high)",
     "price (high to low)",
@@ -18,7 +18,15 @@ export default function Filters() {
     "Oldest",
   ];
   const colors = ["red", "green", "blue"];
-  const category = ["all-products", "cat 02", "cat 03"];
+  const category = [
+    "all-products",
+    "accessories",
+    "featured",
+    "home",
+    "sales",
+    "shose",
+    "tshirts",
+  ];
   const filters = ["filter 01 ", "filter 02", "filter 03"];
   const [openMenuType, setOpenMenuType] = useState(null); // Track the open dropdown by type
 
@@ -90,13 +98,13 @@ export default function Filters() {
             filterBy={category}
             type="cat"
           />
-          <DropDownMenue
+          {/* <DropDownMenue
             handleFilterChange={handleFilterChange}
             isOpen={openMenuType === "AllFilters"}
             onToggleMenu={() => handleToggleMenu("AllFilters")}
             filterBy={filters}
             type="AllFilters"
-          />
+          /> */}
         </div>
         {/* RIGHT */}
         <div className="self-start">

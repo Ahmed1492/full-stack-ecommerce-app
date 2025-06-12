@@ -23,9 +23,15 @@ export default async function SingleProduct({ params }) {
   } catch (error) {
     return notFound();
   }
-  const member = await wixClient.members.getCurrentMember({
-    fieldsets: [members.Set.FULL],
-  });
+
+  const isLoggedIn = wixClient.auth.loggedIn();
+
+  let member;
+  if (isLoggedIn) {
+    member = await wixClient.members.getCurrentMember({
+      fieldsets: [members.Set.FULL],
+    });
+  }
   return (
     <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}
@@ -36,9 +42,10 @@ export default async function SingleProduct({ params }) {
       <div className="w-full md:w-[90%] lg:w-[44%] xl:w-[55%] ">
         <div className="flex flex-col gap-6">
           <h1 className="text-3xl font-medium">{product.name}</h1>
-          <p className="font-medium tdext-sm text-gray-500 ">
-            {product?.description}
-          </p>
+          <span
+            className="font-medium  text-gray-500"
+            dangerouslySetInnerHTML={{ __html: product?.description }}
+          ></span>
           <div className="h-[2px] bg-gray-100" />
           {product.price.price == product.price.discountedPrice ? (
             <div className="flex items-center gap-4">
@@ -74,7 +81,11 @@ export default async function SingleProduct({ params }) {
           <div className="h-[2px] bg-gray-100" />
           {/* REVIEWS */}
           <div className="flex flex-col gap-8">
-            <Reviwes user={member?.member} productId={product?._id} />
+            <Reviwes
+              user={member?.member}
+              product={product}
+              productId={product?._id}
+            />
           </div>
         </div>
       </div>

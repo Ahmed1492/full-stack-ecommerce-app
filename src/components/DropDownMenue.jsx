@@ -38,8 +38,11 @@ export default function DropDownMenue({
         onClick={onToggleMenu}
       >
         <button className="text-sm">
-          {cleanString(selectedOption || type)}
+          {cleanString(
+            selectedOption ? selectedOption : type === "cat" ? "category" : type
+          )}
         </button>
+
         <button>
           <Image src="/drowpdown.png" alt="" width={12} height={12} />
         </button>

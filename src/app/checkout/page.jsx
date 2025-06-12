@@ -8,6 +8,13 @@ import { useCartStore } from "@/hooks/userCartStore";
 import axios from "axios";
 export default async function page() {
   const wixClient = await wixClientServer();
+
+  const isLoggedIn = wixClient.auth.loggedIn();
+
+  if (!isLoggedIn) {
+    return <div>Loggin Firrst</div>;
+  }
+
   const member = await wixClient.members.getCurrentMember({
     fieldsets: [members.Set.FULL],
   });

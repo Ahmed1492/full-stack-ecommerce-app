@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 const slider = [
   {
     id: 1,
-    title: "Summer Sale Collection",
+    title: "Winter Sale Collection",
     description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg?auto=compress&cs=tinysrgb&w=600",
+    img: "https://images.pexels.com/photos/1007018/pexels-photo-1007018.jpeg?auto=compress&cs=tinysrgb&w=1600",
+
     url: "/summer-sale",
     bg: "bg-gradient-to-r from-yellow-50 to-pink-50",
   },
@@ -17,7 +18,7 @@ const slider = [
     id: 2,
     title: "Winter Warmers",
     description: "Stay cozy with discounts up to 40%!",
-    img: "https://images.pexels.com/photos/14996824/pexels-photo-14996824/free-photo-of-man-in-black-hoodie-with-skateboard-at-night.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+    img: "https://images.pexels.com/photos/14996824/pexels-photo-14996824/free-photo-of-man-in-black-hoodie-with-skateboard-at-night.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
     url: "/winter-warmers",
     bg: "bg-gradient-to-r from-blue-50 to-gray-50",
   },
@@ -25,7 +26,7 @@ const slider = [
     id: 3,
     title: "Spring Fresh Arrivals",
     description: "New arrivals with up to 30% off!",
-    img: "https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg?auto=compress&cs=tinysrgb&w=600",
+    img: "https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg?auto=compress&cs=tinysrgb&w=1600",
     url: "/spring-fresh",
     bg: "bg-gradient-to-r from-green-50 to-teal-50",
   },
@@ -33,8 +34,9 @@ const slider = [
     id: 4,
     title: "Spring Fresh Arrivals",
     description: "New arrivals with up to 30% off!",
-    img: "https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg?auto=compress&cs=tinysrgb&w=600",
     url: "/spring-fresh",
+    img: "https://images.pexels.com/photos/720606/pexels-photo-720606.jpeg?auto=compress&cs=tinysrgb&w=1600",
+
     bg: "bg-gradient-to-r from-green-50 to-teal-50",
   },
 ];

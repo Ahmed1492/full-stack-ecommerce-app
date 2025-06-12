@@ -8,6 +8,21 @@ import { useWixClient } from "@/hooks/useWixClient";
 const CheckoutDetails = ({ user }) => {
   const { cart, resetCart } = useCartStore();
   const [isLoading, setLoading] = useState(false);
+  // console.log("====================================");
+  // console.log("cart ", cart.lineItems);
+  // console.log("====================================");
+  let selectedItem =
+    cart?.lineItems &&
+    cart?.lineItems?.map((item) => {
+      return {
+        id: item?.catalogReference?.catalogItemId,
+        quantity: item?.quantity,
+        productName: item.productName.original,
+        price: item.price.amount,
+        img: item.image,
+        itemType: item.itemType.preset,
+      };
+    });
   const [orderData, setOrderData] = useState({
     receiveId: user.contactId,
     phone: "",
@@ -19,7 +34,9 @@ const CheckoutDetails = ({ user }) => {
     receiverEmail: user.loginEmail,
     paymentStatus: "pending",
     orderStatus: "processing",
+    selectedItem,
   });
+
   // console.log("user from client ", user);
   // console.log("cart ", cart.lineItems);
 

@@ -11,6 +11,14 @@ export default function ShoppingProductList() {
 
   const { isLoading, cart, removeItem } = useCartStore();
 
+  console.log("====================================");
+  // console.log("isLoading", isLoading);
+  console.log(cart.lineItems);
+
+  useEffect(() => {
+    // console.log("isLoading", isLoading);
+  }, []);
+
   return (
     <div className="flex flex-col gap-9">
       {isLoading ? (
@@ -19,10 +27,7 @@ export default function ShoppingProductList() {
         <div>Cart Is Empty</div>
       ) : (
         cart?.lineItems.map((item) => (
-          <div
-            key={item?._id}
-            className="flex items-center gap-7  justify-between "
-          >
+          <div key={item?._id} className="flex items-center gap-7  ">
             {item.image && (
               <Image
                 src={wixMedia.getScaledToFillImageUrl(item.image, 72, 96, {})}
@@ -33,9 +38,9 @@ export default function ShoppingProductList() {
               />
             )}
             {/* RIGHT */}
-            <div className="flex  flex-col gap-2">
+            <div className="flex w-full   flex-col gap-2">
               <div className="flex items-center justify-between gap-12">
-                <span className="max-w-60 font-medium  text-lg">
+                <span className="max-w-48 font-medium  text-lg">
                   {item?.productName?.original}
                 </span>
                 <span>${item.price.amount}</span>

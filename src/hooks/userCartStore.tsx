@@ -45,6 +45,10 @@ export const useCartStore = create<CartState>((set) => ({
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      set({
+        isLoading: false,
+      });
     }
   },
 

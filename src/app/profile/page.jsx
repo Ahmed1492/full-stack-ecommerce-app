@@ -5,6 +5,10 @@ import { wixClientServer } from "@/lib/wixClientServer";
 import { members } from "@wix/members";
 export default async function page() {
   const wixClient = await wixClientServer();
+  const isLoggedIn = wixClient.auth.loggedIn();
+
+  if (!isLoggedIn) return <div>Logg in firrst</div>;
+
   const member = await wixClient?.members?.getCurrentMember({
     fieldsets: [members.Set.FULL],
   });
