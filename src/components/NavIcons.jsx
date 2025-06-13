@@ -4,14 +4,19 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import ShoppingProductList from "@/components/ShoppingProductList";
+import Notifications from "@/components/Notifications";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
 import { useCartStore } from "@/hooks/userCartStore";
+import { useNotificationStore } from "../hooks/userNotificationsSrore";
+
 export default function NavIcons() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
   const [total, setTotal] = useState(0);
 
   const router = useRouter();
@@ -48,8 +53,11 @@ export default function NavIcons() {
       router.push("/login");
     }
   };
-
+  const { getNotifications, notifications } = useNotificationStore();
   const { getCart, counter, cart } = useCartStore();
+
+  const { counter: notCounter } = useNotificationStore();
+
   const getCart2 = async () => {
     getCart(wixClient);
   };
@@ -65,6 +73,10 @@ export default function NavIcons() {
     };
     checkLogin();
   }, [pathName, isLoggedIn]);
+
+  useEffect(() => {
+    getNotifications(); // fetch and store in Zustand
+  }, []);
 
   useMemo(() => {
     if (cart?.lineItems) {
@@ -125,15 +137,27 @@ export default function NavIcons() {
             </>
           ))}
       </div>
-
-      <Image
-        className="cursor-pointer "
-        src="/notification.png"
-        alt=""
-        width={22}
-        height={22}
-      />
-
+      <div className="relative">
+        <Image
+          className="cursor-pointer min-w-[22px] "
+          src="/notification.png"
+          alt=""
+          width={22}
+          height={22}
+          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+        />
+        <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-sm text-white">
+          {notCounter}
+        </span>
+        {isNotificationsOpen && (
+          <div className="flex flex-col   gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
+            <h2 className="text-2xl my-3">Notifications</h2>
+            <Suspense fallback="Loading...">
+              <Notifications />
+            </Suspense>
+          </div>
+        )}
+      </div>
       <div className="relative min-w-9 ">
         <Image
           className="cursor-pointer  "
@@ -152,7 +176,6 @@ export default function NavIcons() {
             <Suspense fallback="Loading...">
               <ShoppingProductList />
             </Suspense>
-
             <div className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 <span className="text-lg font-bold">Subtotal</span>

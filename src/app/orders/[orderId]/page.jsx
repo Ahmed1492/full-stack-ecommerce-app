@@ -28,8 +28,8 @@ export default async function page({ params }) {
     );
   return (
     <div className="flex items-center gap-[9rem] min-=h-[90vh] justify-center mt-12 py-[2rem]">
-      <div className="flex flex-col gap-4 mt-[4rem] items-center">
-        <h3 className="text-center font-semibold text-2xl">Order Detaisl</h3>
+      <div className="flex flex-col gap-4 mt-[4rem] items-censter">
+        <h3 className="text-centera font-semibold text-2xl">Order Detaisl</h3>
         {/* Order Id */}
         <div className="flex flex-col gap-4 text-left justify-start  text-xl font-light   mt-[2rem]   ">
           <span>Order Id :{orderDetails?._id}</span>
@@ -48,7 +48,7 @@ export default async function page({ params }) {
 
           <span
             className="border-b border-black text-lg pb-0 text-gray-800 font-semibold cursor-pointer
-         text-center self-center mt-[1rem] w-max "
+          mt-[1rem] w-max "
           >
             Have A Problem ? Contact Us
           </span>

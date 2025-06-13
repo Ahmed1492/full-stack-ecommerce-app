@@ -4,13 +4,14 @@ import axios from "axios";
 import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWixClient } from "@/hooks/useWixClient";
+import { useNotificationStore } from "../hooks/userNotificationsSrore";
 
 const CheckoutDetails = ({ user }) => {
   const { cart, resetCart } = useCartStore();
   const [isLoading, setLoading] = useState(false);
-  // console.log("====================================");
-  // console.log("cart ", cart.lineItems);
-  // console.log("====================================");
+  const router = useRouter();
+  let wixClient = useWixClient();
+
   let selectedItem =
     cart?.lineItems &&
     cart?.lineItems?.map((item) => {
@@ -37,6 +38,25 @@ const CheckoutDetails = ({ user }) => {
     selectedItem,
   });
 
+  const handleOrderNotification = (order) => {
+    console.log("order.id ", order.receiveId);
+
+    order?.selectedItem?.forEach((item) => {
+      console.log("item.name ", item.productName);
+      console.log("item.image ", item.img);
+      addNotification({
+        id: `${order.receiveId}-${item._id}`, // unique per item
+        productName: item.productName,
+        productImage: item.img, // or item.img
+        message: `Thanks for buying ${item.productName.slice(
+          0,
+          6
+        )}...! Drop a review?`,
+        date: new Date().toLocaleString(),
+      });
+    });
+  };
+
   // console.log("user from client ", user);
   // console.log("cart ", cart.lineItems);
 
@@ -57,7 +77,6 @@ const CheckoutDetails = ({ user }) => {
     console.log("Updated orderData:", updatedData);
   };
 
-  const router = useRouter();
   const goToOrderPage = (orderId) => {
     router.push(`orders/${orderId}`); // Navigate to another route
   };
@@ -101,7 +120,8 @@ const CheckoutDetails = ({ user }) => {
       console.log(error);
     }
   };
-  let wixClient = useWixClient();
+  const { addNotification } = useNotificationStore();
+
   const handleCheckout = async () => {
     try {
       setLoading(true);
@@ -117,8 +137,8 @@ const CheckoutDetails = ({ user }) => {
       }
       console.log("user Exist we added order only!");
       await createOrder(orderData);
-
       await resetCart(wixClient);
+      await handleOrderNotification(orderData);
     } catch (error) {
       console.log(error);
     } finally {

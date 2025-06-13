@@ -2,6 +2,7 @@ import React from "react";
 import CheckoutDetails from "@/components/CheckoutDetails";
 // import UserInfo from "@/components/UserInfo";
 import OrderSummary from "@/components/OrderSummary.jsx";
+import LoginFirst from "@/components/LoginFirst.jsx";
 import { members } from "@wix/members";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { useCartStore } from "@/hooks/userCartStore";
@@ -12,7 +13,7 @@ export default async function page() {
   const isLoggedIn = wixClient.auth.loggedIn();
 
   if (!isLoggedIn) {
-    return <div>Loggin Firrst</div>;
+    return <LoginFirst />;
   }
 
   const member = await wixClient.members.getCurrentMember({

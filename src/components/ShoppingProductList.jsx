@@ -20,7 +20,7 @@ export default function ShoppingProductList() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-9">
+    <div className="flex flex-col  gap-9">
       {isLoading ? (
         "Loading...."
       ) : !cart?.lineItems || cart?.lineItems?.length <= 0 ? (

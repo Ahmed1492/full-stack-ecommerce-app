@@ -3,11 +3,12 @@ import UpdateUser from "@/components/UpdateUser";
 import OrderHistory from "@/components/OrderHistory";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { members } from "@wix/members";
+import LoginFirst from "@/components/LoginFirst";
 export default async function page() {
   const wixClient = await wixClientServer();
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  if (!isLoggedIn) return <div>Logg in firrst</div>;
+  if (!isLoggedIn) return <LoginFirst />;
 
   const member = await wixClient?.members?.getCurrentMember({
     fieldsets: [members.Set.FULL],
