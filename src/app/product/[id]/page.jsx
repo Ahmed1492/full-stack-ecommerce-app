@@ -32,6 +32,11 @@ export default async function SingleProduct({ params }) {
       fieldsets: [members.Set.FULL],
     });
   }
+
+  console.log("========= single page =====");
+  console.log("product id", product._id);
+
+  console.log("=== single page =====");
   return (
     <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}

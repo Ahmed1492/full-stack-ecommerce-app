@@ -7,7 +7,7 @@ import { split } from "postcss/lib/list";
 
 export default function Orderinfo({ orderDetails }) {
   return (
-    <div className="flex items-center gap-[2rem]">
+    <div className="flex items-center flex-wrap gap-[2rem]">
       {orderDetails?.selectedItem?.map((item) => {
         let itemUrl = item?.productName
           ?.toLowerCase()
@@ -35,7 +35,7 @@ export default function Orderinfo({ orderDetails }) {
             {/* RIGHT */}
             <div className="flex justify-center flex-col gap-2">
               <span className="max-w-60 font-medium  text-lg">
-                {item?.productName}
+                <span>{item?.productName?.slice(0, 9) + "..."}</span>
               </span>
               <span>${item.price}</span>
 

@@ -3,10 +3,10 @@ import axios from "axios";
 import React from "react";
 
 export default async function UpdateUser({ user }) {
-  if (!user.contactId) {
+  if (!user?.contactId) {
     return <div>not logged in..!</div>;
   }
-  let userId = user.contactId;
+  let userId = user?.contactId;
   const updateUserOnDB = async () => {
     try {
       let myResponse = await axios.patch(

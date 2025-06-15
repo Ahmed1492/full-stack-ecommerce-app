@@ -54,7 +54,7 @@ export default async function page({ params }) {
           </span>
         </div>
       </div>
-      <div>
+      <div className="max-w-[40%]">
         <Orderinfo orderDetails={orderDetails} />
       </div>
     </div>

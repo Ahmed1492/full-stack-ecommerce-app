@@ -15,6 +15,7 @@ type NotificationState = {
 
   getNotifications: () => void;
   addNotification: (notification: Notification) => void;
+  removeNotification: (id: string) => void; // ✅ new method
 };
 
 export const useNotificationStore = create<NotificationState>((set, get) => ({
@@ -25,7 +26,6 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   getNotifications: () => {
     set({ isLoading: true });
 
-    // Load from localStorage
     const stored = localStorage.getItem("notifications");
     const parsed = stored ? JSON.parse(stored) : [];
 
@@ -34,15 +34,23 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       counter: parsed.length,
       isLoading: false,
     });
-
-    // console.log("parse ", parsed);
   },
 
   addNotification: (notification) => {
     const current = get().notifications;
     const updated = [notification, ...current];
 
-    // Save to state and localStorage
+    set({
+      notifications: updated,
+      counter: updated.length,
+    });
+    localStorage.setItem("notifications", JSON.stringify(updated));
+  },
+
+  removeNotification: (id) => {
+    const current = get().notifications;
+    const updated = current.filter((n) => n.id !== id);
+
     set({
       notifications: updated,
       counter: updated.length,

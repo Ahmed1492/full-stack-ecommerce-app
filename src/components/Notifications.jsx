@@ -18,10 +18,17 @@ export default function Notifications() {
   useEffect(() => {
     getNotifications(); // fetch and store in Zustand
   }, []);
-
+  let isLoggedIn = wixClient.auth.loggedIn();
   useEffect(() => {
-    setAllNot(notifications); // update local state when Zustand changes
-  }, [notifications]);
+    if (isLoggedIn) {
+      setAllNot(notifications); // update local state when Zustand changes
+    } else {
+      setAllNot([]);
+      if (localStorage.getItem("notifications")) {
+        localStorage.removeItem("notifications");
+      }
+    }
+  }, [notifications, isLoggedIn]);
 
   console.log("====================================");
   console.log("all ", allNot);

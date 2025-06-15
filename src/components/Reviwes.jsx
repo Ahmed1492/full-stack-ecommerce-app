@@ -3,6 +3,9 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import StarReview from "./StarReview";
+import { useNotificationStore } from "../hooks/userNotificationsSrore";
 
 export default function Reviwes({ productId, user, product }) {
   const [reviwes, setReviews] = useState([]);
@@ -10,11 +13,6 @@ export default function Reviwes({ productId, user, product }) {
   const [isShow, setIsShow] = useState(true);
   const [isLoading, setLoading] = useState(false);
   const [hasOrderItem, setHasOrderItem] = useState(false);
-
-  console.log("====================================");
-  // console.log("productId , ", productId);
-  // console.log("user.contactId , ", user.contactId);
-  console.log("====================================");
 
   const [userD, setUserD] = useState({
     productId: productId,
@@ -25,6 +23,7 @@ export default function Reviwes({ productId, user, product }) {
     productId: productId,
     title: user?.profile?.nickname,
     userId: user?.contactId,
+    starsNumber: 0,
   });
   dayjs.extend(relativeTime);
 
@@ -39,6 +38,17 @@ export default function Reviwes({ productId, user, product }) {
       console.log(error);
     }
   };
+  console.log("====================================");
+
+  let id = `${userD.userId}-${userD.productId}`;
+  let statid =
+    "a9d38b31-e2d0-4884-aecc-8d12e1c6c838-531ab8cb-e761-4215-93da-f1558b25d4db";
+
+  console.log("f", statid);
+  console.log("f", id);
+
+  console.log("====================================");
+  const { removeNotification } = useNotificationStore();
 
   const createComment = async () => {
     try {
@@ -50,8 +60,12 @@ export default function Reviwes({ productId, user, product }) {
         `http://localhost:2000/comment`,
         newComment
       );
+      let id = `${userD.userId}-${userD.productId}`;
+      let statid =
+        "a9d38b31-e2d0-4884-aecc-8d12e1c6c838-531ab8cb-e761-4215-93da-f1558b25d4db";
       await getReviwes();
       await isUserComment();
+      removeNotification(id);
       // console.log(myResponse);
     } catch (error) {
       console.log(error);
@@ -132,35 +146,70 @@ export default function Reviwes({ productId, user, product }) {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-medium">{section?.title}</h2>
-                <p className="tracking-wide font-medium">{section.content}</p>
+                <p className="tracking-wide  text-gray-500">@ahmed123</p>
+                <div className="my-[14px] flex gap-6 items-center">
+                  {/* Show comment start */}
+                  <StarReview
+                    initialRating={section?.starsNumber || 0}
+                    readOnly={true}
+                  />
+                  <span className="text-gray-500 ">
+                    {dayjs(section.createdAt).fromNow()}
+                  </span>
+                </div>
+                <p className="tracking-wide font-medium">
+                  {section.content} Lorem, ipsum dolor sit amet consectetur
+                  adipisicing elit. Illum possimus, assumenda, distinctio
+                  necessitatibus vel exercitationem nesciunt adipisci dolorem
+                  esse itaque deleniti excepturi tenetur ratione vitae
+                  laudantium. Quam illo harum eius?
+                </p>
               </div>
-              <span className="text-gray-700 font-medium">
+              {/* <span className="text-gray-700 font-medium">
                 {dayjs(section.createdAt).fromNow()}
-              </span>
+              </span> */}
+              <Image
+                className="cursor-pointer"
+                src="/option.svg"
+                alt=""
+                width={17}
+                height={14}
+              />
             </div>
           </div>
         );
       })}
 
       {!isShow && hasOrderItem && (
-        <div className="flex justify-center mt-7">
-          <input
-            onChange={(e) =>
-              setNewComment({ ...newComment, content: e.target.value })
-            }
-            className="bg-slate-100 w-[80%] outline-none px-3 py-3 rounded-md"
-            type="text"
-            placeholder="Leave A Comment..!"
-          />
-          <button
-            onClick={createComment}
-            className={`${
-              isLoading ? "bg-slate-200" : "bg-[#D02E64]"
-            } py-3 px-3 text-white`}
-          >
-            Comment
-          </button>
-        </div>
+        <>
+          <div className="ms-[2rem]">
+            {/* Create Comment Start */}
+            <StarReview
+              initialRating={0}
+              readOnly={false}
+              newComment={newComment}
+              setNewComment={setNewComment}
+            />
+          </div>
+          <div className="flex justify-center  items-center mt-1">
+            <input
+              onChange={(e) =>
+                setNewComment({ ...newComment, content: e.target.value })
+              }
+              className="bg-slate-100 w-[80%] outline-none px-3 py-3 rounded-md"
+              type="text"
+              placeholder="Leave A Comment..!"
+            />
+            <button
+              onClick={createComment}
+              className={`${
+                isLoading ? "bg-slate-200" : "bg-[#D02E64]"
+              } py-3 px-3 text-white`}
+            >
+              Comment
+            </button>
+          </div>
+        </>
       )}
     </>
   );

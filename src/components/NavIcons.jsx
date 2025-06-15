@@ -58,8 +58,19 @@ export default function NavIcons() {
 
   const { counter: notCounter } = useNotificationStore();
 
-  const getCart2 = async () => {
-    getCart(wixClient);
+  const pathname = usePathname(); // tells us where we are now
+
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = () => {
+    if (!cart?.lineItems?.length) return;
+
+    setLoading(true);
+    router.push("/checkout");
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000); // 3000ms = 3 seconds
   };
 
   useEffect(() => {
@@ -91,9 +102,9 @@ export default function NavIcons() {
 
   return (
     <div className="flex items-center  gap-6">
-      <div className="relative min-w-9 ">
+      <div className="relative  min-w-9 ">
         <Image
-          className="cursor-pointer "
+          className="cursor-pointer ms-[1rem] "
           src="/profile.png"
           alt=""
           width={22}
@@ -112,14 +123,20 @@ export default function NavIcons() {
                   } `}
                   href="/profile"
                 >
-                  Profile
+                  <div className="flex items-center gap-2">
+                    <Image src="/mprofile.svg" alt="" width={22} height={20} />
+                    <span>Profile</span>
+                  </div>
                 </Link>
-                <span
-                  onClick={handleLogOut}
-                  className="cursor-pointer hover:text-[#D02E64] "
-                >
-                  {isLoading ? "loading..." : "LogOut"}
-                </span>
+                <div className="flex items-center gap-2">
+                  <Image src="/logout.svg" alt="" width={22} height={20} />
+                  <span
+                    onClick={handleLogOut}
+                    className="cursor-pointer hover:text-[#D02E64] "
+                  >
+                    {isLoading ? "loading..." : "LogOut"}
+                  </span>
+                </div>
               </div>
             </>
           ) : (
@@ -147,18 +164,22 @@ export default function NavIcons() {
           onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
         />
         <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-sm text-white">
-          {notCounter}
+          {isLoggedIn ? notCounter : 0}
         </span>
         {isNotificationsOpen && (
           <div className="flex flex-col   gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
-            <h2 className="text-2xl my-3">Notifications</h2>
+            <div className="flex items-center gap-2">
+              <Image src="/notification.svg" alt="" width={34} height={30} />
+              <h2 className="text-2xl my-3">Notifications</h2>
+            </div>
+
             <Suspense fallback="Loading...">
               <Notifications />
             </Suspense>
           </div>
         )}
       </div>
-      <div className="relative min-w-9 ">
+      <div className="relative min-w-9 z-50 ">
         <Image
           className="cursor-pointer  "
           src="/cart.png"
@@ -172,7 +193,12 @@ export default function NavIcons() {
         </span>
         {isCartOpen && (
           <div className="flex flex-col   gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
-            <h2 className="text-2xl my-3">Shopping Cart</h2>
+            <div className="flex items-center gap-2">
+              <Image src="/cart2.svg" alt="" width={34} height={30} />
+
+              <h2 className="text-2xl my-3">Shopping Cart</h2>
+            </div>
+
             <Suspense fallback="Loading...">
               <ShoppingProductList />
             </Suspense>
@@ -190,16 +216,17 @@ export default function NavIcons() {
                 </button>
 
                 {cart?.lineItems && (
-                  <Link
-                    href={cart?.lineItems?.length == 0 ? pathName : "/checkout"}
-                    className={`${
-                      cart.lineItems.length === 0
-                        ? "bg-slate-300 cursor-not-allowed"
-                        : "bg-black text-white  hover:bg-white hover:text-black "
-                    }   border text-sm    transition-all duration-200  py-3 px-3 rounded-md`}
+                  <button
+                    onClick={handleCheckout}
+                    disabled={loading || !cart?.lineItems?.length}
+                    className={`border text-sm py-3 px-4 rounded-md transition-all duration-200 ${
+                      cart?.lineItems?.length
+                        ? "bg-black text-white hover:bg-white hover:text-black"
+                        : "bg-slate-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    Checkout
-                  </Link>
+                    {loading ? "Loading..." : "Checkout"}
+                  </button>
                 )}
               </div>
             </div>

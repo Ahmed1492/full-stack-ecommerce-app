@@ -42,10 +42,12 @@ const CheckoutDetails = ({ user }) => {
     console.log("order.id ", order.receiveId);
 
     order?.selectedItem?.forEach((item) => {
+      console.log(`id for delete >>>> ${order.receiveId}-${item.id}`);
+
       console.log("item.name ", item.productName);
       console.log("item.image ", item.img);
       addNotification({
-        id: `${order.receiveId}-${item._id}`, // unique per item
+        id: `${order.receiveId}-${item.id}`, // unique per item
         productName: item.productName,
         productImage: item.img, // or item.img
         message: `Thanks for buying ${item.productName.slice(

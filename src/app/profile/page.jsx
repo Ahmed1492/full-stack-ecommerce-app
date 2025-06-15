@@ -10,11 +10,16 @@ export default async function page() {
 
   if (!isLoggedIn) return <LoginFirst />;
 
-  const member = await wixClient?.members?.getCurrentMember({
-    fieldsets: [members.Set.FULL],
-  });
+  let member;
 
-  console.log("member ", member.member);
+  try {
+    member = await wixClient?.members?.getCurrentMember({
+      fieldsets: [members.Set.FULL],
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  console.log("member ", member?.member);
   return (
     <div className="flex items-center justify-between w-[80%] mt-3 m-auto">
       <div className="xl:w-[30rem]">
