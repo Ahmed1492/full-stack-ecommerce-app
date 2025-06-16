@@ -6,13 +6,17 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import StarReview from "./StarReview";
 import { useNotificationStore } from "../hooks/userNotificationsSrore";
-
+import { myGetMemberFunction } from "../lib/getMember";
+import Link from "next/link";
 export default function Reviwes({ productId, user, product }) {
   const [reviwes, setReviews] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [isShow, setIsShow] = useState(true);
   const [isLoading, setLoading] = useState(false);
   const [hasOrderItem, setHasOrderItem] = useState(false);
+  const [mode, setMode] = useState("create");
+  const [isMenueOpen, setIsMenueOpen] = useState(false);
+  const [updatedComment, setUpdatedComment] = useState();
 
   const [userD, setUserD] = useState({
     productId: productId,
@@ -22,6 +26,7 @@ export default function Reviwes({ productId, user, product }) {
     content: "",
     productId: productId,
     title: user?.profile?.nickname,
+    slug: user?.profile?.slug,
     userId: user?.contactId,
     starsNumber: 0,
   });
@@ -40,14 +45,14 @@ export default function Reviwes({ productId, user, product }) {
   };
   console.log("====================================");
 
-  let id = `${userD.userId}-${userD.productId}`;
+  // let id = `${userD.userId}-${userD.productId}`;
   let statid =
     "a9d38b31-e2d0-4884-aecc-8d12e1c6c838-531ab8cb-e761-4215-93da-f1558b25d4db";
 
-  console.log("f", statid);
-  console.log("f", id);
+  // console.log("f", statid);
+  // console.log("f", id);
 
-  console.log("====================================");
+  // console.log("====================================");
   const { removeNotification } = useNotificationStore();
 
   const createComment = async () => {
@@ -76,9 +81,9 @@ export default function Reviwes({ productId, user, product }) {
 
   const isUserComment = async (userId) => {
     try {
-      console.log("====================================");
-      console.log(userD);
-      console.log("====================================");
+      // console.log("====================================");
+      // console.log(userD);
+      // console.log("====================================");
       let myResponse = await axios.post(
         `http://localhost:2000/checkUserComment`,
         userD
@@ -129,6 +134,29 @@ export default function Reviwes({ productId, user, product }) {
     return false; // No match found
   }
 
+  const selectUpatedComment = (comment) => {
+    setMode("update");
+    setUpdatedComment(comment);
+    console.log("updated Comment", comment);
+  };
+
+  const handleUpdate = async () => {
+    try {
+      let myResponse = await axios.patch(
+        `http://localhost:2000/comment/${updatedComment._id}`,
+        updatedComment
+      );
+      console.log(myResponse);
+
+      setMode("create");
+      setIsMenueOpen(false);
+      await getReviwes();
+      await getAllReviwes();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getReviwes();
     isUserComment();
@@ -138,6 +166,8 @@ export default function Reviwes({ productId, user, product }) {
     <>
       <h2 className="text-2xl font-bold text-center">Reviews</h2>
       {reviwes.map((section) => {
+        // console.log("section ,", section);
+
         return (
           <div
             className="flex flex-col border-b border-slate-200 pb-4 gap-2"
@@ -145,8 +175,15 @@ export default function Reviwes({ productId, user, product }) {
           >
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-medium">{section?.title}</h2>
-                <p className="tracking-wide  text-gray-500">@ahmed123</p>
+                <div className="flex items-center gap-4">
+                  <h2 className="text-2xl font-medium">{section?.title}</h2>
+                  {section?.updatedBrfore && (
+                    <span className="text-gray-400"> {"(Updated)"} </span>
+                  )}
+                </div>
+                <p className="tracking-wide  text-gray-500">
+                  @{section.slug || "NAN"}
+                </p>
                 <div className="my-[14px] flex gap-6 items-center">
                   {/* Show comment start */}
                   <StarReview
@@ -154,31 +191,97 @@ export default function Reviwes({ productId, user, product }) {
                     readOnly={true}
                   />
                   <span className="text-gray-500 ">
-                    {dayjs(section.createdAt).fromNow()}
+                    {dayjs(section.updatedAt).fromNow()}
+                    {/* {dayjs(section.createdAt).fromNow()} */}
                   </span>
                 </div>
-                <p className="tracking-wide font-medium">
-                  {section.content} Lorem, ipsum dolor sit amet consectetur
-                  adipisicing elit. Illum possimus, assumenda, distinctio
-                  necessitatibus vel exercitationem nesciunt adipisci dolorem
-                  esse itaque deleniti excepturi tenetur ratione vitae
-                  laudantium. Quam illo harum eius?
-                </p>
+                <p className="tracking-wide font-medium">{section.content}</p>
               </div>
               {/* <span className="text-gray-700 font-medium">
                 {dayjs(section.createdAt).fromNow()}
               </span> */}
-              <Image
-                className="cursor-pointer"
-                src="/option.svg"
-                alt=""
-                width={17}
-                height={14}
-              />
+              <div className="relative">
+                <Image
+                  onClick={() => setIsMenueOpen(!isMenueOpen)}
+                  className="cursor-pointer"
+                  src="/option.svg"
+                  alt=""
+                  width={17}
+                  height={14}
+                />
+                {isMenueOpen && (
+                  <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
+                    <div className="cursor-pointer select-none">
+                      <div className="flex items-center gap-2">
+                        <Image
+                          src="/update.svg"
+                          alt=""
+                          width={22}
+                          height={20}
+                        />
+                        <span
+                          onClick={() => {
+                            selectUpatedComment(section);
+                            setIsMenueOpen(false);
+                          }}
+                          className="hover:text-[#D02E64] duration-500"
+                        >
+                          Update
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Image src="/delete.svg" alt="" width={22} height={20} />
+                      <span className="cursor-pointer hover:text-[#D02E64] duration-500 ">
+                        Delete
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         );
       })}
+
+      {mode === "update" && (
+        <>
+          <div className="ms-[2rem]">
+            {/* Create Comment Start */}
+            <StarReview
+              initialRating={updatedComment.starsNumber}
+              readOnly={false}
+              newComment={newComment}
+              setNewComment={setNewComment}
+              updatedComment={updatedComment}
+              setUpdatedComment={setUpdatedComment}
+              mode={mode}
+            />
+          </div>
+          <div className="flex justify-center  items-center mt-1">
+            <input
+              value={updatedComment.content}
+              onChange={(e) =>
+                setUpdatedComment({
+                  ...updatedComment,
+                  content: e.target.value,
+                })
+              }
+              className="bg-slate-100 w-[80%] outline-none px-3 py-3 rounded-md"
+              type="text"
+              placeholder="update comment !"
+            />
+            <button
+              onClick={handleUpdate}
+              className={`${
+                isLoading ? "bg-slate-200" : "bg-[#D02E64]"
+              } py-3 px-3 text-white`}
+            >
+              Update
+            </button>
+          </div>
+        </>
+      )}
 
       {!isShow && hasOrderItem && (
         <>

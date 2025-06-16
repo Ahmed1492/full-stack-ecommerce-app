@@ -118,7 +118,7 @@ export default function NavIcons() {
             <>
               <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
                 <Link
-                  className={`hover:text-[#D02E64] ${
+                  className={`duration-500 hover:text-[#D02E64] ${
                     pathName === "/profile" && "text-[#D02E64]"
                   } `}
                   href="/profile"
@@ -132,7 +132,7 @@ export default function NavIcons() {
                   <Image src="/logout.svg" alt="" width={22} height={20} />
                   <span
                     onClick={handleLogOut}
-                    className="cursor-pointer hover:text-[#D02E64] "
+                    className=" duration-500 cursor-pointer hover:text-[#D02E64] "
                   >
                     {isLoading ? "loading..." : "LogOut"}
                   </span>

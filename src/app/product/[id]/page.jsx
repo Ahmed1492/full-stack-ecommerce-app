@@ -7,6 +7,7 @@ import Reviwes from "@/components/Reviwes";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { notFound } from "next/navigation";
 import { members } from "@wix/members";
+
 export default async function SingleProduct({ params }) {
   const wixClient = await wixClientServer();
   let products;
@@ -33,10 +34,12 @@ export default async function SingleProduct({ params }) {
     });
   }
 
-  console.log("========= single page =====");
-  console.log("product id", product._id);
+  // console.log("========= single page =====");
+  // console.log("product id", product._id);
 
-  console.log("=== single page =====");
+  // console.log("=== single page =====");
+
+
   return (
     <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}

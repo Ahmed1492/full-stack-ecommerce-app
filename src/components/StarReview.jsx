@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 
 // export default function StarReview({ newComment, setNewComment }) {
 //   const [rating, setRating] = useState(0);
@@ -33,19 +35,32 @@ import { useState } from "react";
 // }
 
 // import { useState } from "react";
-
 export default function StarReview({
   initialRating,
   readOnly,
   newComment,
   setNewComment,
+  updatedComment,
+  setUpdatedComment,
+  mode,
 }) {
   const [rating, setRating] = useState(initialRating || 0);
   const [hover, setHover] = useState(0);
 
+  useEffect(() => {
+    setRating(initialRating || 0);
+  }, [initialRating]);
+
   const handleClick = (stars) => {
     if (readOnly) return;
     setRating(stars);
+    if (mode === "update") {
+      setUpdatedComment({ ...updatedComment, starsNumber: stars });
+      console.log("updated comment ", updatedComment);
+
+      return;
+    }
+
     setNewComment({ ...newComment, starsNumber: stars });
   };
 
