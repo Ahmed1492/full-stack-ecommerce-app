@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { LoginState } from "@wix/sdk";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useCartStore } from "@/hooks/userCartStore";
 export default function LoginPage() {
   const [mode, setMode] = useState("login");
   const [username, setUsername] = useState("");
@@ -24,6 +25,7 @@ export default function LoginPage() {
   const isLoggedIn = wixClient.auth.loggedIn();
   // console.log("isLoggedIn ", isLoggedIn);
 
+  const { moveGuestCartToUser } = useCartStore();
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -101,6 +103,7 @@ export default function LoginPage() {
       // console.log(error);
     } finally {
       setIsLoading(false);
+      // await moveGuestCartToUser(wixClient);
     }
   };
 

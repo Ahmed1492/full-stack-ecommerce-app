@@ -43,7 +43,7 @@ export default function Reviwes({ productId, user, product }) {
       console.log(error);
     }
   };
-  console.log("====================================");
+  // console.log("====================================");
 
   // let id = `${userD.userId}-${userD.productId}`;
   let statid =
@@ -88,7 +88,7 @@ export default function Reviwes({ productId, user, product }) {
         `http://localhost:2000/checkUserComment`,
         userD
       );
-      console.log("<><><>", myResponse.data.hasCommented);
+      // console.log("<><><>", myResponse.data.hasCommented);
 
       setIsShow(myResponse.data.hasCommented);
     } catch (error) {
@@ -101,16 +101,16 @@ export default function Reviwes({ productId, user, product }) {
       let myResponse = await axios.get("http://localhost:2000/orders");
       // console.log("test>>", myResponse.data.order);
 
-      console.log("====================================");
-      console.log("userId", user.contactId);
-      console.log("product", product);
+      // console.log("====================================");
+      // console.log("userId", user.contactId);
+      // console.log("product", product);
 
       await hasUserOrderedItem(
         myResponse.data.order,
         user.contactId,
         productId
       );
-      console.log("====================================");
+      // console.log("====================================");
       // setAllOrders(myResponse.data.order);
     } catch (error) {}
   };
@@ -121,7 +121,7 @@ export default function Reviwes({ productId, user, product }) {
         for (const item of order.selectedItem) {
           if (item.id === itemId) {
             setHasOrderItem(true);
-            console.log("result is ", true);
+            // console.log("result is ", true);
 
             return true; // Found a matching order
           }
@@ -130,14 +130,14 @@ export default function Reviwes({ productId, user, product }) {
     }
     setHasOrderItem(false);
 
-    console.log("result is ", false);
+    // console.log("result is ", false);
     return false; // No match found
   }
 
   const selectUpatedComment = (comment) => {
     setMode("update");
     setUpdatedComment(comment);
-    console.log("updated Comment", comment);
+    // console.log("updated Comment", comment);
   };
 
   const handleUpdate = async () => {
@@ -146,7 +146,7 @@ export default function Reviwes({ productId, user, product }) {
         `http://localhost:2000/comment/${updatedComment._id}`,
         updatedComment
       );
-      console.log(myResponse);
+      // console.log(myResponse);
 
       setMode("create");
       setIsMenueOpen(false);
@@ -178,7 +178,7 @@ export default function Reviwes({ productId, user, product }) {
                 <div className="flex items-center gap-4">
                   <h2 className="text-2xl font-medium">{section?.title}</h2>
                   {section?.updatedBrfore && (
-                    <span className="text-gray-400"> {"(Updated)"} </span>
+                    <span className="text-gray-400"> {"(Edited)"} </span>
                   )}
                 </div>
                 <p className="tracking-wide  text-gray-500">

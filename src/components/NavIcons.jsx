@@ -27,7 +27,7 @@ export default function NavIcons() {
   const pathName = usePathname();
   // console.log("====================================");
   // console.log("pathName ", pathName);
-  console.log("isLoggedIn ", isLoggedIn);
+  // console.log("isLoggedIn ", isLoggedIn);
   // console.log("====================================");
   const handleProfile = () => {
     setIsProfileOpen(!isProfileOpen);
@@ -44,7 +44,7 @@ export default function NavIcons() {
     try {
       await wixClient.auth.logout(); // Important!
       const status = await wixClient.auth.loggedIn();
-      console.log("Still logged in after logout?", status); // Should be false
+      // console.log("Still logged in after logout?", status); // Should be false
     } catch (error) {
       console.log(error);
     } finally {

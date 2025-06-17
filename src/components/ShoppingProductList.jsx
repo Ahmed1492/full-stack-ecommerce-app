@@ -11,12 +11,15 @@ export default function ShoppingProductList() {
 
   const { isLoading, cart, removeItem } = useCartStore();
 
-  console.log("====================================");
+  const { moveGuestCartToUser } = useCartStore();
+
+  // console.log("====================================");
   // console.log("isLoading", isLoading);
-  console.log(cart.lineItems);
+  // console.log(cart.lineItems);
 
   useEffect(() => {
     // console.log("isLoading", isLoading);
+    moveGuestCartToUser(wixClient);
   }, []);
 
   return (

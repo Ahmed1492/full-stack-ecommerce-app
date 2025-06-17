@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 export default function Navbar() {
   return (
-    <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-[10%] pt-4 ">
+    <div className="h-20 sticky top-1 shadow-lg rounded-lg z-50 bg-white px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-[10%] pt-4 ">
       <div className="md:flex flex-wrap    items-center gap-9">
         {/*MOBILE SCREAN  */}
         <div className=" flex items-center justify-between h-full md:hidden">

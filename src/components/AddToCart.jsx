@@ -2,25 +2,34 @@
 import { useCartStore } from "@/hooks/userCartStore";
 import { useWixClient } from "@/hooks/useWixClient";
 
-export default function AddToCart({ productId }) {
+export default function AddToCart({
+  productId,
+  variantId,
+  quantity = 1,
+  item,
+}) {
   const { addItem } = useCartStore();
   const wixClient = useWixClient();
 
-  console.log("====== outside page =====");
-  console.log("product id", productId);
-  console.log("========= outside page =========");
+  const isLoggedIn = wixClient.auth.loggedIn();
 
   const handleClick = async () => {
-    console.log("🛒 CLICKED:", productId);
-
+    let newObj = {
+      wixClient,
+      productId,
+      variantId,
+      quantity,
+      isLoggedIn,
+    };
     try {
       await addItem(
         wixClient,
         productId,
-        "00000000-0000-0000-0000-000000000000", // or actual variantId
-        1
+        variantId, 
+        quantity,
+        isLoggedIn
       );
-      console.log("✅ Item added successfully:", productId);
+      console.log("from global page ", newObj);
     } catch (err) {
       console.error("❌ Failed to add item:", err);
     }

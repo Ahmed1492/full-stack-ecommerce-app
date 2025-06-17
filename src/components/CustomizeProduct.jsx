@@ -20,7 +20,7 @@ export default function CustomizeProduct({
     }
     setQuantity(0);
   };
-  // console.log(variants);
+  console.log("variants", variants);
   const isVariantsInStock = (choices) => {
     return variants.some((variant) => {
       const variantChoices = variant.choices;

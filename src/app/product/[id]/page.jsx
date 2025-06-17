@@ -39,7 +39,6 @@ export default async function SingleProduct({ params }) {
 
   // console.log("=== single page =====");
 
-
   return (
     <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}
@@ -82,7 +81,9 @@ export default async function SingleProduct({ params }) {
           ) : (
             <AddProduct
               productId={product?._id}
-              variantId="00000000-0000-0000-0000-000000000000"
+              variantId={
+                item.variants[0]._id || "00000000-0000-0000-0000-000000000000"
+              }
               stockNumber={product.stock.quantity || 0}
             />
           )}

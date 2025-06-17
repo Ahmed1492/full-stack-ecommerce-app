@@ -12,6 +12,7 @@ export default function AddProduct({
   // setQuantity,
 }) {
   const wixClient = useWixClient();
+  const isLoggedIn = wixClient.auth.loggedIn();
 
   const [quantity, setQuantity] = useState(1);
   const handleIncrease = () => {
@@ -27,6 +28,18 @@ export default function AddProduct({
   };
 
   const { addItem } = useCartStore();
+
+  const handleAddToCart = () => {
+    let newObj = {
+      wixClient,
+      productId,
+      variantId,
+      quantity,
+      isLoggedIn,
+    };
+    addItem(wixClient, productId, variantId, quantity, isLoggedIn);
+    console.log("single page ", newObj);
+  };
   return (
     <div className="flex flex-col gap-5">
       {stockNumber < 1 ? (
@@ -53,9 +66,7 @@ export default function AddProduct({
                 </div>
               </div>
               <button
-                onClick={() =>
-                  addItem(wixClient, productId, variantId, quantity)
-                }
+                onClick={handleAddToCart}
                 className="border border-[#b54f46] w-[8rem] py-3 text-sm font-medium text-[#b54f46] rounded-2xl"
               >
                 Add To Cart
