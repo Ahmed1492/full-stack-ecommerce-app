@@ -37,6 +37,9 @@ export default async function OrderHistory({ user }) {
       </>
     );
 
+  const handleDelete = (order) => {
+    console.log(order);
+  };
   return (
     <div className="">
       <div className="flex items-center gap-2 mb-[2rem]">
@@ -48,21 +51,29 @@ export default async function OrderHistory({ user }) {
       {/* ALL ORDERS */}
       <div className="flex flex-col gap-[1rem]">
         {allOrders?.map((order, index) => (
-          <Link
-            href={`/orders/${order._id}`}
-            key={index}
-            className={`cursor-pointer ${
+          <div
+            className={`cursor-pointer  px-4 py-5 ${
               (index + 1) % 2 === 0 ? "bg-slate-100" : ""
-            }  px-4 py-5 rounded-md   text-lg flex items-center gap-[3rem]`}
+            }   flex items-center justify-between`}
+            key={index}
           >
-            <span>
-              {order._id.slice(0, 4)}...{order._id.slice(-4)}
-            </span>
+            <Link
+              href={`/orders/${order._id}`}
+              className={`  rounded-md w-[84%]   text-lg flex items-center justify-between gap-[3rem]`}
+            >
+              <span>
+                {order._id.slice(0, 4)}...{order._id.slice(-4)}
+              </span>
 
-            <span>${order.price}</span>
-            <span>{dayjs(order.createdAt).fromNow()}</span>
-            <span>{order.paymentStatus}</span>
-          </Link>
+              <span>${order.price}</span>
+              <span>{dayjs(order.createdAt).fromNow()}</span>
+              <span>{order.paymentStatus}</span>
+            </Link>
+
+            {/* <span>
+              <Image src="/delete-red.svg" alt="" width={20} height={19} />{" "}
+            </span> */}
+          </div>
         ))}
       </div>
     </div>

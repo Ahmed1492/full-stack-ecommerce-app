@@ -21,11 +21,11 @@ export default async function page() {
   }
   console.log("member ", member?.member);
   return (
-    <div className="flex items-center justify-between w-[80%] mt-3 m-auto">
+    <div className="flex items-center1 justify-between w-[80%] mt-3 m-auto">
       <div className="xl:w-[30rem]">
         <UpdateUser user={member?.member} />
       </div>
-      <div className="xl:w-[41rem]">
+      <div className="xl:w-[41rem] mt-3">
         <OrderHistory user={member?.member} />
       </div>
     </div>

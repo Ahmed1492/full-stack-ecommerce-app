@@ -15,8 +15,15 @@ export default function Reviwes({ productId, user, product }) {
   const [isLoading, setLoading] = useState(false);
   const [hasOrderItem, setHasOrderItem] = useState(false);
   const [mode, setMode] = useState("create");
-  const [isMenueOpen, setIsMenueOpen] = useState(false);
+  const [isMenueOpen, setIsMenueOpen] = useState({ status: false, id: "" });
   const [updatedComment, setUpdatedComment] = useState();
+  const [commentedUser, setCommentedUser] = useState({
+    _id: "",
+    username: " ",
+    firstname: " ",
+    surname: " ",
+    slug: "",
+  });
 
   const [userD, setUserD] = useState({
     productId: productId,
@@ -99,17 +106,13 @@ export default function Reviwes({ productId, user, product }) {
   const getAllReviwes = async () => {
     try {
       let myResponse = await axios.get("http://localhost:2000/orders");
-      // console.log("test>>", myResponse.data.order);
-
-      // console.log("====================================");
-      // console.log("userId", user.contactId);
-      // console.log("product", product);
 
       await hasUserOrderedItem(
         myResponse.data.order,
         user.contactId,
         productId
       );
+
       // console.log("====================================");
       // setAllOrders(myResponse.data.order);
     } catch (error) {}
@@ -140,6 +143,16 @@ export default function Reviwes({ productId, user, product }) {
     // console.log("updated Comment", comment);
   };
 
+  const getUserById = async (id) => {
+    try {
+      let myResponse = await axios.get(`http://localhost:2000/user/${id}`);
+      console.log(myResponse.data);
+      setCommentedUser(myResponse.data.result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleUpdate = async () => {
     try {
       let myResponse = await axios.patch(
@@ -149,7 +162,7 @@ export default function Reviwes({ productId, user, product }) {
       // console.log(myResponse);
 
       setMode("create");
-      setIsMenueOpen(false);
+      setIsMenueOpen({ status: false });
       await getReviwes();
       await getAllReviwes();
     } catch (error) {
@@ -166,8 +179,8 @@ export default function Reviwes({ productId, user, product }) {
     <>
       <h2 className="text-2xl font-bold text-center">Reviews</h2>
       {reviwes.map((section) => {
-        // console.log("section ,", section);
-
+        console.log("section_id ,", section);
+        // getUserById(section.userId);
         return (
           <div
             className="flex flex-col border-b border-slate-200 pb-4 gap-2"
@@ -176,13 +189,16 @@ export default function Reviwes({ productId, user, product }) {
             <div className="flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-4">
-                  <h2 className="text-2xl font-medium">{section?.title}</h2>
+                  <h2 className="text-2xl font-medium">
+                    {section?.userId?.firstname} {"  "}
+                    {section?.userId?.surname && section?.userId?.surname}
+                  </h2>
                   {section?.updatedBrfore && (
                     <span className="text-gray-400"> {"(Edited)"} </span>
                   )}
                 </div>
                 <p className="tracking-wide  text-gray-500">
-                  @{section.slug || "NAN"}
+                  @{section?.userId?.username || section.slug || "NAN"}
                 </p>
                 <div className="my-[14px] flex gap-6 items-center">
                   {/* Show comment start */}
@@ -202,15 +218,20 @@ export default function Reviwes({ productId, user, product }) {
               </span> */}
               <div className="relative">
                 <Image
-                  onClick={() => setIsMenueOpen(!isMenueOpen)}
+                  onClick={() =>
+                    setIsMenueOpen({
+                      status: !isMenueOpen.status,
+                      id: section._id,
+                    })
+                  }
                   className="cursor-pointer"
                   src="/option.svg"
                   alt=""
                   width={17}
                   height={14}
                 />
-                {isMenueOpen && (
-                  <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
+                {isMenueOpen.status && isMenueOpen?.id === section._id && (
+                  <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30">
                     <div className="cursor-pointer select-none">
                       <div className="flex items-center gap-2">
                         <Image
@@ -222,7 +243,7 @@ export default function Reviwes({ productId, user, product }) {
                         <span
                           onClick={() => {
                             selectUpatedComment(section);
-                            setIsMenueOpen(false);
+                            setIsMenueOpen({ status: false });
                           }}
                           className="hover:text-[#D02E64] duration-500"
                         >
