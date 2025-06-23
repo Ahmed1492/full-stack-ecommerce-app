@@ -6,7 +6,7 @@ A full-featured **online shopping platform** built with **Next.js**, offering a 
 ## 🚀 Demo
 
 https://www.linkedin.com/posts/activity-7342732677650812928-Jbv-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-hKsAB1QXZ1eSyBx8nGWP48RuYiBX5Bdg
----
+
 
 ## 📦 Features
 
