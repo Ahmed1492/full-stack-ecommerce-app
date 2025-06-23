@@ -9,16 +9,17 @@ const slider = [
     id: 1,
     title: "Winter Sale Collection",
     description: "Sale! Up to 50% off!",
-    img: "https://images.pexels.com/photos/1007018/pexels-photo-1007018.jpeg?auto=compress&cs=tinysrgb&w=1600",
+
+    img: "https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?_gl=1*44puyi*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzEyMDMkajQxJGwwJGgw",
 
     url: "/summer-sale",
     bg: "bg-gradient-to-r from-yellow-50 to-pink-50",
   },
   {
     id: 2,
-    title: "Winter Warmers",
+    title: "Summer Warmers",
     description: "Stay cozy with discounts up to 40%!",
-    img: "https://images.pexels.com/photos/14996824/pexels-photo-14996824/free-photo-of-man-in-black-hoodie-with-skateboard-at-night.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load",
+    img: "https://images.pexels.com/photos/5531551/pexels-photo-5531551.jpeg?_gl=1*14zkx42*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzE0NDQkajYwJGwwJGgw",
     url: "/winter-warmers",
     bg: "bg-gradient-to-r from-blue-50 to-gray-50",
   },
@@ -26,7 +27,8 @@ const slider = [
     id: 3,
     title: "Spring Fresh Arrivals",
     description: "New arrivals with up to 30% off!",
-    img: "https://images.pexels.com/photos/2043590/pexels-photo-2043590.jpeg?auto=compress&cs=tinysrgb&w=1600",
+
+    img: "https://images.pexels.com/photos/29906028/pexels-photo-29906028.jpeg?_gl=1*112cyfa*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzEyOTEkajYwJGwwJGgw",
     url: "/spring-fresh",
     bg: "bg-gradient-to-r from-green-50 to-teal-50",
   },
@@ -35,7 +37,7 @@ const slider = [
     title: "Spring Fresh Arrivals",
     description: "New arrivals with up to 30% off!",
     url: "/spring-fresh",
-    img: "https://images.pexels.com/photos/720606/pexels-photo-720606.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    img: "https://images.pexels.com/photos/15658380/pexels-photo-15658380.jpeg?_gl=1*185zqvo*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzIyNzgkajI2JGwwJGgw",
 
     bg: "bg-gradient-to-r from-green-50 to-teal-50",
   },
@@ -48,20 +50,20 @@ export default function HomeSlider() {
     console.log(currentSlide);
   };
 
-  // useEffect(() => {
-  //   const sliderInterval = setInterval(() => {
-  //     if (currentSlide === slider.length - 1) {
-  //       setCurrentSlide(0);
-  //       console.log("first");
-  //     } else {
-  //       setCurrentSlide(currentSlide + 1);
-  //       console.log("second");
-  //       console.log(currentSlide);
-  //     }
-  //   }, 3000);
+  useEffect(() => {
+    const sliderInterval = setInterval(() => {
+      if (currentSlide === slider.length - 1) {
+        setCurrentSlide(0);
+        console.log("first");
+      } else {
+        setCurrentSlide(currentSlide + 1);
+        console.log("second");
+        console.log(currentSlide);
+      }
+    }, 2000);
 
-  //   return () => clearInterval(sliderInterval);
-  // }, [currentSlide]);
+    return () => clearInterval(sliderInterval);
+  }, [currentSlide]);
   return (
     <div className="overflow-x-hidden w-screen   flex customHeight">
       <div className={`w-max h-full flex `}>
@@ -105,10 +107,10 @@ export default function HomeSlider() {
             <div
               onClick={() => handleSlide(index)}
               key={slide.id}
-              className="ring ring-gray-900 rounded-full p-2 cursor-pointer"
+              className="ring ring-[#6f696c] rounded-full p-2 cursor-pointer"
             >
               {index == currentSlide && (
-                <span className="bg-gray-900 w-2 h-2 rounded-full flex justify-center items-center "></span>
+                <span className="bg-[#D02E64] w-2 h-2 rounded-full flex justify-center items-center "></span>
               )}
             </div>
           ))}

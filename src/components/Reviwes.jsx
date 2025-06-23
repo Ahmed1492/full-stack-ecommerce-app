@@ -8,8 +8,10 @@ import StarReview from "./StarReview";
 import { useNotificationStore } from "../hooks/userNotificationsSrore";
 import { myGetMemberFunction } from "../lib/getMember";
 import Link from "next/link";
+import { Trykker } from "next/font/google";
 export default function Reviwes({ productId, user, product }) {
   const [reviwes, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
   const [allOrders, setAllOrders] = useState([]);
   const [isShow, setIsShow] = useState(true);
   const [isLoading, setLoading] = useState(false);
@@ -39,28 +41,23 @@ export default function Reviwes({ productId, user, product }) {
   });
   dayjs.extend(relativeTime);
 
+  const { removeNotification } = useNotificationStore();
+
   const getReviwes = async () => {
     try {
       let myResponse = await axios.get(
         `http://localhost:2000/comment/${productId}`
       );
+      setLoadingReviews(true);
+
       // console.log(">>>", myResponse.data.result);
       setReviews(myResponse.data.result);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingReviews(false);
     }
   };
-  // console.log("====================================");
-
-  // let id = `${userD.userId}-${userD.productId}`;
-  let statid =
-    "a9d38b31-e2d0-4884-aecc-8d12e1c6c838-531ab8cb-e761-4215-93da-f1558b25d4db";
-
-  // console.log("f", statid);
-  // console.log("f", id);
-
-  // console.log("====================================");
-  const { removeNotification } = useNotificationStore();
 
   const createComment = async () => {
     try {
@@ -143,16 +140,6 @@ export default function Reviwes({ productId, user, product }) {
     // console.log("updated Comment", comment);
   };
 
-  const getUserById = async (id) => {
-    try {
-      let myResponse = await axios.get(`http://localhost:2000/user/${id}`);
-      console.log(myResponse.data);
-      setCommentedUser(myResponse.data.result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleUpdate = async () => {
     try {
       let myResponse = await axios.patch(
@@ -170,6 +157,24 @@ export default function Reviwes({ productId, user, product }) {
     }
   };
 
+  const handleDelete = async (comment) => {
+    try {
+      let myResponse = await axios.delete(
+        `http://localhost:2000/comment/${comment._id}`
+      );
+      console.log(myResponse.data);
+      setIsMenueOpen({ status: false });
+      await getReviwes();
+      await getAllReviwes();
+      setHasOrderItem(true);
+      setIsShow(false);
+      // hasOrderItem
+      // isShow
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getReviwes();
     isUserComment();
@@ -178,92 +183,115 @@ export default function Reviwes({ productId, user, product }) {
   return (
     <>
       <h2 className="text-2xl font-bold text-center">Reviews</h2>
-      {reviwes.map((section) => {
-        console.log("section_id ,", section);
-        // getUserById(section.userId);
-        return (
-          <div
-            className="flex flex-col border-b border-slate-200 pb-4 gap-2"
-            key={section._id}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-4">
-                  <h2 className="text-2xl font-medium">
-                    {section?.userId?.firstname} {"  "}
-                    {section?.userId?.surname && section?.userId?.surname}
-                  </h2>
-                  {section?.updatedBrfore && (
-                    <span className="text-gray-400"> {"(Edited)"} </span>
-                  )}
+      {loadingReviews && <div>Loading......</div>}
+
+      {loadingReviews ? (
+        <div>Loading......</div>
+      ) : reviwes.length == 0 ? (
+        <div> No Comments yet </div>
+      ) : (
+        reviwes.map((section) => {
+          // console.log("section_id ,", section);
+
+          return (
+            <div
+              className="flex flex-col border-b border-slate-200 pb-4 gap-2"
+              key={section._id}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-2xl font-medium">
+                      {section?.userId?.firstname} {"  "}
+                      {section?.userId?.surname && section?.userId?.surname}
+                    </h2>
+                    {userD.userId === section.userId._id && (
+                      <span className="text-gray-400"> {"(you)"} </span>
+                    )}
+                    {section?.updatedBrfore && (
+                      <>
+                        <span className="text-gray-400"> {"(Edited)"} </span>
+                      </>
+                    )}
+                  </div>
+                  <p className="tracking-wide  text-gray-500">
+                    @{section?.userId?.username || section.slug || "NAN"}
+                  </p>
+                  <div className="my-[14px] flex gap-6 items-center">
+                    {/* Show comment start */}
+                    <StarReview
+                      initialRating={section?.starsNumber || 0}
+                      readOnly={true}
+                    />
+                    <span className="text-gray-500 ">
+                      {dayjs(section.updatedAt).fromNow()}
+                      {/* {dayjs(section.createdAt).fromNow()} */}
+                    </span>
+                  </div>
+                  <p className="tracking-wide font-medium">{section.content}</p>
                 </div>
-                <p className="tracking-wide  text-gray-500">
-                  @{section?.userId?.username || section.slug || "NAN"}
-                </p>
-                <div className="my-[14px] flex gap-6 items-center">
-                  {/* Show comment start */}
-                  <StarReview
-                    initialRating={section?.starsNumber || 0}
-                    readOnly={true}
-                  />
-                  <span className="text-gray-500 ">
-                    {dayjs(section.updatedAt).fromNow()}
-                    {/* {dayjs(section.createdAt).fromNow()} */}
-                  </span>
-                </div>
-                <p className="tracking-wide font-medium">{section.content}</p>
-              </div>
-              {/* <span className="text-gray-700 font-medium">
+                {/* <span className="text-gray-700 font-medium">
                 {dayjs(section.createdAt).fromNow()}
               </span> */}
-              <div className="relative">
-                <Image
-                  onClick={() =>
-                    setIsMenueOpen({
-                      status: !isMenueOpen.status,
-                      id: section._id,
-                    })
-                  }
-                  className="cursor-pointer"
-                  src="/option.svg"
-                  alt=""
-                  width={17}
-                  height={14}
-                />
-                {isMenueOpen.status && isMenueOpen?.id === section._id && (
-                  <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30">
-                    <div className="cursor-pointer select-none">
+                <div className="relative">
+                  {userD.userId === section.userId._id && (
+                    <Image
+                      onClick={() =>
+                        setIsMenueOpen({
+                          status: !isMenueOpen.status,
+                          id: section._id,
+                        })
+                      }
+                      className="cursor-pointer max-w-9 max-h-8"
+                      src="/option.svg"
+                      alt=""
+                      width={18}
+                      height={10}
+                    />
+                  )}
+                  {isMenueOpen.status && isMenueOpen?.id === section._id && (
+                    <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30">
+                      <div className="cursor-pointer select-none">
+                        <div className="flex items-center gap-2">
+                          <Image
+                            src="/update.svg"
+                            alt=""
+                            width={22}
+                            height={20}
+                          />
+                          <span
+                            onClick={() => {
+                              selectUpatedComment(section);
+                              setIsMenueOpen({ status: false });
+                            }}
+                            className="hover:text-[#D02E64] duration-500"
+                          >
+                            Update
+                          </span>
+                        </div>
+                      </div>
                       <div className="flex items-center gap-2">
                         <Image
-                          src="/update.svg"
+                          src="/delete.svg"
                           alt=""
                           width={22}
                           height={20}
                         />
                         <span
-                          onClick={() => {
-                            selectUpatedComment(section);
-                            setIsMenueOpen({ status: false });
-                          }}
-                          className="hover:text-[#D02E64] duration-500"
+                          onClick={() => handleDelete(section)}
+                          className="cursor-pointer hover:text-[#D02E64] duration-500 "
                         >
-                          Update
+                          Delete
                         </span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Image src="/delete.svg" alt="" width={22} height={20} />
-                      <span className="cursor-pointer hover:text-[#D02E64] duration-500 ">
-                        Delete
-                      </span>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
 
       {mode === "update" && (
         <>

@@ -54,8 +54,21 @@ export default function AddProduct({
                 <div className="flex items-center gap-8">
                   <div className="bg-gray-100 rounded-3xl px-[17px] py-[10px] text-lg flex items-center gap-10 select-none">
                     <button onClick={handleDecrease}>-</button>
-                    <span>{quantity}</span>
-                    <button onClick={handleIncrease}>+</button>
+                    <span>
+                      {quantity > stockNumber
+                        ? setQuantity(stockNumber)
+                        : quantity}
+                    </span>
+                    <button
+                      className={`${
+                        quantity == stockNumber
+                          ? "cursor-not-allowed text-slate-300"
+                          : ""
+                      }`}
+                      onClick={handleIncrease}
+                    >
+                      +
+                    </button>
                   </div>
                   <div className="text-sm">
                     Only{" "}

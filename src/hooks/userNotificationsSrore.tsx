@@ -57,4 +57,12 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
     });
     localStorage.setItem("notifications", JSON.stringify(updated));
   },
+
+  clearNotifications: () => {
+    set({
+      notifications: [],
+      counter: 0,
+    });
+    localStorage.removeItem("notifications");
+  },
 }));

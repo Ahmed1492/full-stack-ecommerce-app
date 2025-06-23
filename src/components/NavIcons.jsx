@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import ShoppingProductList from "@/components/ShoppingProductList";
+import SkeletonCart from "@/components/SkeletonCart";
 import Notifications from "@/components/Notifications";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
@@ -56,7 +57,7 @@ export default function NavIcons() {
   const { getNotifications, notifications } = useNotificationStore();
   const { getCart, counter, cart } = useCartStore();
 
-  const { counter: notCounter } = useNotificationStore();
+  const { counter: notCounter, clearNotifications } = useNotificationStore();
 
   const pathname = usePathname(); // tells us where we are now
 
@@ -69,10 +70,18 @@ export default function NavIcons() {
     router.push("/checkout");
 
     setTimeout(() => {
+      setIsCartOpen(false);
       setLoading(false);
-    }, 3000); // 3000ms = 3 seconds
+    }, 1000); // 3000ms = 3 seconds
   };
 
+  const delteNotifications = () => {
+    if (localStorage.getItem("notifications")) {
+      localStorage.removeItem("notifications");
+      clearNotifications();
+    }
+    return;
+  };
   useEffect(() => {
     getCart(wixClient);
   }, []);
@@ -167,12 +176,19 @@ export default function NavIcons() {
           {isLoggedIn ? notCounter : 0}
         </span>
         {isNotificationsOpen && (
-          <div className="flex flex-col   gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
+          <div className="flex flex-col max-h-[34rem] overflow-y-auto   gap-2 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
             <div className="flex items-center gap-2">
               <Image src="/notification.svg" alt="" width={34} height={30} />
               <h2 className="text-2xl my-3">Notifications</h2>
             </div>
-
+            {notCounter !== 0 && (
+              <button
+                onClick={delteNotifications}
+                className="flex justify-end w-max text-left self-end text-blue-400 font-medium cursor-pointer"
+              >
+                Clear All
+              </button>
+            )}
             <Suspense fallback="Loading...">
               <Notifications />
             </Suspense>
@@ -192,14 +208,14 @@ export default function NavIcons() {
           {counter}
         </span>
         {isCartOpen && (
-          <div className="flex flex-col   gap-5 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
+          <div className="flex flex-col min-w-[23rem] max-h-[34rem] overflow-y-auto    gap-5 shadow-2xl bg-white  rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
             <div className="flex items-center gap-2">
               <Image src="/cart2.svg" alt="" width={34} height={30} />
 
               <h2 className="text-2xl my-3">Shopping Cart</h2>
             </div>
 
-            <Suspense fallback="Loading...">
+            <Suspense fallback={<SkeletonCart />}>
               <ShoppingProductList />
             </Suspense>
             <div className="flex flex-col gap-1">

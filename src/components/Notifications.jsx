@@ -48,7 +48,7 @@ export default function Notifications() {
             <Link
               href={`/product/${productPath}`}
               key={index}
-              className="flex min-w-[20rem] hover:bg-slate-100 duration-500 py-2 px-2 rounded-md cursor-pointer items-center gap-2  "
+              className="flex min-w-[20rem] hover:bg-slate-100 duration-500 py-1 px-2 rounded-md cursor-pointer items-center gap-2  "
             >
               {item.productImage && (
                 <Image
@@ -66,7 +66,7 @@ export default function Notifications() {
               )}
               {/* RIGHT */}
               <div className="">
-                <span className=" cursor-pointer font-medium  text-sm  ">
+                <span className=" cursor-pointer font-medium  text-[15px]    ">
                   Thanks for buying
                   <span className="text-[#D02E64] font-bold">
                     {" "}

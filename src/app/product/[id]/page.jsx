@@ -1,7 +1,8 @@
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 import ProductImage from "@/components/ProductImage";
 import CustomizeProduct from "@/components/CustomizeProduct";
+import SkeletonSingelPage from "@/components/SkeletonSingelPage";
 import AddProduct from "@/components/AddProduct";
 import Reviwes from "@/components/Reviwes";
 import { wixClientServer } from "@/lib/wixClientServer";
@@ -12,7 +13,9 @@ export default async function SingleProduct({ params }) {
   const wixClient = await wixClientServer();
   let products;
   let product;
+  let loading;
   try {
+    loading = true;
     products = await wixClient?.products
       .queryProducts()
       .eq("slug", params.id)
@@ -23,6 +26,8 @@ export default async function SingleProduct({ params }) {
     product = products?.items[0];
   } catch (error) {
     return notFound();
+  } finally {
+    loading = false;
   }
 
   const isLoggedIn = wixClient.auth.loggedIn();
@@ -39,14 +44,21 @@ export default async function SingleProduct({ params }) {
 
   // console.log("=== single page =====");
 
+  if (loading) {
+    return <div>Loading........</div>;
+  }
+
+  {
+    /* <SkeletonSingelPage /> */
+  }
   return (
-    <div className="flex justify-center relative lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
+    <div className="flex justify-center relative  lg:justify-between  gap-y-12 flex-wrap   px-[10%] ">
       {/* IMAGES */}
       <div className="w-full md:w-[90%] lg:sticky h-max top-40   lg:w-[50%] xl:w-[38%] ">
         <ProductImage items={product.media.items} />
       </div>
       {/* DESCRIPTIONS */}
-      <div className="w-full md:w-[90%] lg:w-[44%] xl:w-[55%] ">
+      <div className="w-full mt-[1rem] md:w-[90%] lg:w-[44%] xl:w-[55%] ">
         <div className="flex flex-col gap-6">
           <h1 className="text-3xl font-medium">{product.name}</h1>
           <span
@@ -90,11 +102,13 @@ export default async function SingleProduct({ params }) {
           <div className="h-[2px] bg-gray-100" />
           {/* REVIEWS */}
           <div className="flex flex-col gap-8">
-            <Reviwes
-              user={member?.member}
-              product={product}
-              productId={product?._id}
-            />
+            <Suspense fallback={"Loding........"}>
+              <Reviwes
+                user={member?.member}
+                product={product}
+                productId={product?._id}
+              />
+            </Suspense>
           </div>
         </div>
       </div>

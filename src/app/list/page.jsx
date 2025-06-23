@@ -5,6 +5,7 @@ import Pagination from "@/components/Pagination";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import SkeletonLoader from "@/components/SkeletonLoader";
 
 export default async function SingleCategory({ searchParams }) {
   let cat;
@@ -27,6 +28,7 @@ export default async function SingleCategory({ searchParams }) {
       {/* TOP */}
       <div className="bg-pink-100 lg:py-0  py-10 rounded-lg flex flex-col lg:flex-row  items-center justify-around text-gray-900">
         {/* LEFT */}
+
         <div className="flex items-center w-[80%]   lg:w-[38%] flex-col gap-7">
           <h1 className="lg:text-4xl text-xl font-semibold lg:self-start">
             Grab up to 50% off on <br /> Selected Products
@@ -52,8 +54,9 @@ export default async function SingleCategory({ searchParams }) {
       <h2 className="text-xl font-bold my-8">
         {cat?.collection?.name} For You!
       </h2>
-      <Suspense fallback={"Loading.."}>
+      <Suspense fallback={<SkeletonLoader />}>
         <ProductList
+          type="list"
           categoryId={
             cat?.collection?._id || "00000000-000000-000000-000000000001"
           }

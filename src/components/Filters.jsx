@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DropDownMenue from "@/components/DropDownMenue";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { debounce } from "../utlity/debounce";
 
 export default function Filters() {
   const [isOpenMenue, setIsOpenMenue] = useState(false);
@@ -35,7 +36,7 @@ export default function Filters() {
   };
 
   const handleFilterChange = (type, option) => {
-    if (type == "SortBy") {
+    if (type === "SortBy") {
       if (option === "price (low to high)") {
         option = "asc price";
       } else if (option === "price (high to low)") {
@@ -46,12 +47,21 @@ export default function Filters() {
         option = "desc lastUpdated";
       }
     }
-    const params = new URLSearchParams(searchParams);
-    params.set(type, option);
-    replace(`${pathName}?${params.toString()}`);
-    // console.log("Type:>>", type, ", Selected Option:", option);
-  };
 
+    const params = new URLSearchParams(searchParams);
+
+    if (option && option.trim() !== "") {
+      params.set(type, option);
+    } else {
+      params.delete(type);
+    }
+
+    replace(`${pathName}?${params.toString()}`, { shallow: true });
+  };
+  const router = useRouter();
+  useEffect(() => {
+    router.prefetch("/all-products");
+  }, []);
   return (
     <div className="mt-5">
       <div className="flex flex-wrdap gap-y-6 items-center justify-between">
@@ -68,13 +78,20 @@ export default function Filters() {
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
             placeholder="Min Price "
-            onChange={(e) => handleFilterChange("min", e.target.value)}
+            onChange={debounce(
+              (e) => handleFilterChange("min", e.target.value),
+              500
+            )}
           />
+
           <input
             className="border border-gray-400 rounded-2xl px-2 py-2 outline-none w-24 text-sm"
             type="text"
             placeholder="Max Price "
-            onChange={(e) => handleFilterChange("max", e.target.value)}
+            onChange={debounce(
+              (e) => handleFilterChange("max", e.target.value),
+              500
+            )}
           />
 
           {/* <DropDownMenue

@@ -45,7 +45,7 @@ export default async function OrderHistory({ user }) {
       <div className="flex items-center gap-2 mb-[2rem]">
         <Image src="/order.svg" alt="" width={30} height={28} />
         <h2 className="text-2xl  font-semibold ">
-          Orders ({allOrders?.length})
+          Orders ({allOrders?.length || 0} )
         </h2>
       </div>
       {/* ALL ORDERS */}

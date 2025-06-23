@@ -7,7 +7,12 @@ import DOMPurify from "isomorphic-dompurify";
 import Pagination from "./Pagination";
 // import { useCartStore } from "@/hooks/userCartStore";
 
-export default async function ProductList({ categoryId, limit, searchParams }) {
+export default async function ProductList({
+  categoryId,
+  limit,
+  searchParams,
+  type,
+}) {
   const wixClient = await wixClientServer();
   const productPerPage = 8;
   let productQuery;
@@ -97,18 +102,26 @@ export default async function ProductList({ categoryId, limit, searchParams }) {
                 />
               )}
             </Link>
-            <AddToCart variantId ={item.variants[0]._id} productId={item?._id} />
+            
+            <AddToCart
+              stockNumber={item?.stock?.quantity}
+              variantId={item.variants[0]._id}
+              productId={item?._id}
+            />
             {/* <button className="px-4 text-sm py-2 bg-transparent border border-red-400 text-red-400 rounded-2xl mt-2">
             Add to Cart
           </button> */}
           </div>
         );
       })}
-      <Pagination
-        currentPage={res.currentPage || 0}
-        hasPrev={res.hasPrev()}
-        hasNext={res.hasNext()}
-      />
+
+      {type && type == "list" && (
+        <Pagination
+          currentPage={res.currentPage || 0}
+          hasPrev={res.hasPrev()}
+          hasNext={res.hasNext()}
+        />
+      )}
     </div>
   );
 }
