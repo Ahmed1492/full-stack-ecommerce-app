@@ -17,8 +17,7 @@ const HomePage = async () => {
         <Suspense fallback={<SkeletonLoader />}>
           <ProductList
             categoryId={process.env.FEATURED_PRODUCT_CATEGORY_ID!}
-            limit={4}
-          />
+            limit={4} searchParams={undefined} type={undefined}          />
         </Suspense>
       </div>
 
@@ -32,7 +31,7 @@ const HomePage = async () => {
       <div className="px-[10%]">
         <h1 className="text-2xl mt-20 mb-7 font-medium ">New Products</h1>
         <Suspense fallback={<SkeletonLoader />}>
-          <ProductList categoryId={process.env.FEATURED_PRODUCT_CATEGORY_ID!} />
+          <ProductList categoryId={process.env.FEATURED_PRODUCT_CATEGORY_ID!} limit={undefined} searchParams={undefined} type={undefined} />
         </Suspense>
       </div>
     </div>

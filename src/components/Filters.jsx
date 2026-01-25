@@ -80,7 +80,7 @@ export default function Filters() {
             placeholder="Min Price "
             onChange={debounce(
               (e) => handleFilterChange("min", e.target.value),
-              500
+              500,
             )}
           />
 
@@ -90,7 +90,7 @@ export default function Filters() {
             placeholder="Max Price "
             onChange={debounce(
               (e) => handleFilterChange("max", e.target.value),
-              500
+              500,
             )}
           />
 
