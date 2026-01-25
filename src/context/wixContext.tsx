@@ -13,7 +13,6 @@ const wixClient = createClient({
     products,
     collections,
     currentCart,
-  
   },
   auth: OAuthStrategy({
     clientId: process.env.NEXT_PUBLIC_WIX_CLIENT_ID!,
