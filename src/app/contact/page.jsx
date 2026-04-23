@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 const CONTACT_INFO = [
-  { icon: "📧", label: "Email", value: "support@ecommerce.com", sub: "We reply within 24 hours" },
+  { icon: "📧", label: "Email", value: "support@trenova.com", sub: "We reply within 24 hours" },
   { icon: "📞", label: "Phone", value: "+123 456 7890", sub: "Mon–Fri, 9am–6pm" },
   { icon: "📍", label: "Address", value: "Cairo, Egypt", sub: "Visit our showroom" },
 ];

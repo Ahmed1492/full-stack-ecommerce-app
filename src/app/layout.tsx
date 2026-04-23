@@ -7,8 +7,8 @@ import { WixClientContextProvider } from "@/context/wixContext";
 const inter = Inter({ subsets: ["latin"] });
 // import {wixClientContextProvider} from "../context/wixContext"
 export const metadata: Metadata = {
-  title: "E-Commerce Application",
-  description: "A complete e-commerce application with Next.js and Wix",
+  title: "Trenova — Shop the Latest Trends",
+  description: "Trenova is your go-to destination for fashion, accessories, and lifestyle products.",
 };
 
 export default function RootLayout({

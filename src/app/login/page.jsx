@@ -93,7 +93,7 @@ export default function LoginPage() {
           <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
             <Image src="/logo.png" alt="" width={18} height={18} />
           </div>
-          <span className="text-white text-xl font-bold">Ecommerce</span>
+          <span className="text-white text-xl font-bold">Tren<span className="text-pink-300">ova</span></span>
         </Link>
 
         {/* Center content */}
@@ -115,26 +115,26 @@ export default function LoginPage() {
         </div>
 
         {/* Bottom */}
-        <p className="text-pink-300 text-xs z-10">© 2025 Ecommerce. All rights reserved.</p>
+        <p className="text-pink-300 text-xs z-10">© 2025 Trenova. All rights reserved.</p>
       </div>
 
       {/* RIGHT — form panel */}
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-12 bg-gray-50">
+      <div className="flex-1 flex flex-col justify-center items-center px-6 py-8 bg-gray-50 min-h-screen">
         {/* Mobile logo */}
-        <Link href="/" className="flex items-center gap-2 mb-8 lg:hidden">
+        <Link href="/" className="flex items-center gap-2 mb-6 lg:hidden">
           <Image src="/logo.png" alt="" width={20} height={20} />
-          <span className="text-lg font-bold text-gray-900">Ecommerce</span>
+          <span className="text-lg font-bold text-gray-900">Tren<span className="text-[#D02E64]">ova</span></span>
         </Link>
 
         <div className="w-full max-w-md">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <h1 className="text-3xl font-extrabold text-gray-900">{titles[mode].heading}</h1>
-            <p className="text-gray-500 text-sm mt-2">{titles[mode].sub}</p>
+            <p className="text-gray-500 text-sm mt-1.5">{titles[mode].sub}</p>
           </div>
 
           {/* Form card */}
-          <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-8">
+          <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_8px_40px_-8px_rgba(0,0,0,0.12)] p-8">
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
               {/* Username — register only */}
@@ -246,7 +246,7 @@ export default function LoginPage() {
           </div>
 
           {/* Mode switcher */}
-          <div className="mt-6 text-center text-sm text-gray-500">
+          <div className="mt-4 text-center text-sm text-gray-500">
             {mode === "login" && (
               <>Don&apos;t have an account?{" "}
                 <button onClick={() => { setMode("register"); setError(""); setMessage(""); }}

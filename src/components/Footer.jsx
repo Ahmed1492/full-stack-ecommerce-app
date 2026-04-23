@@ -42,7 +42,7 @@ const PAYMENTS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400 mt-24">
+    <footer className="bg-gray-900 text-gray-400 ">
       {/* Top bar */}
       <div className="border-b border-gray-800 px-[10%] py-10">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -51,7 +51,7 @@ export default function Footer() {
             <div className="w-9 h-9 rounded-xl bg-[#D02E64] flex items-center justify-center">
               <Image src="/logo.png" alt="" width={18} height={18} />
             </div>
-            <span className="text-white text-xl font-bold tracking-tight">Ecommerce</span>
+            <span className="text-white text-xl font-bold tracking-tight">Tren<span className="text-pink-300">ova</span></span>
           </div>
 
           {/* Newsletter */}
@@ -80,8 +80,8 @@ export default function Footer() {
           </p>
           <div>
             <p className="text-xs text-gray-600 uppercase tracking-widest mb-1">Email</p>
-            <a href="mailto:support@ecommerce.com" className="text-sm text-gray-300 hover:text-white transition">
-              support@ecommerce.com
+            <a href="mailto:support@trenova.com" className="text-sm text-gray-300 hover:text-white transition">
+              support@trenova.com
             </a>
           </div>
           <div>
@@ -130,7 +130,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-gray-800 px-[10%] py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-xs text-gray-600">
-          © 2025 Ecommerce by Ahmed Mohamed. All rights reserved.
+          © 2025 Trenova by Ahmed Mohamed. All rights reserved.
         </p>
 
         {/* Payment icons */}

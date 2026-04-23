@@ -14,7 +14,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between w-full md:hidden">
           <Link className="text-xl font-bold tracking-tight flex items-center gap-2" href="/">
             <Image src="/logo.png" alt="" width={22} height={22} />
-            <span>Ecommerce</span>
+            <span className="text-[#D02E64]">Tren<span className="text-gray-900">ova</span></span>
           </Link>
           <div className="flex items-center gap-3">
             <Suspense fallback={null}>
@@ -29,7 +29,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link className="text-xl font-bold tracking-tight flex items-center gap-2 flex-shrink-0" href="/">
             <Image src="/logo.png" alt="" width={22} height={22} />
-            <span>Ecommerce</span>
+            <span className="text-[#D02E64]">Tren<span className="text-gray-900">ova</span></span>
           </Link>
 
           {/* Nav Links — client for active state */}

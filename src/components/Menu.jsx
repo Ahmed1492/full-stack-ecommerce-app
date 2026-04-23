@@ -53,7 +53,7 @@ export default function Menu() {
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <Link href="/" className="text-lg font-bold flex items-center gap-2">
             <Image src="/logo.png" alt="" width={20} height={20} />
-            Ecommerce
+            <span className="text-[#D02E64]">Tren<span className="text-gray-900">ova</span></span>
           </Link>
           <button
             onClick={() => setIsOpen(false)}
