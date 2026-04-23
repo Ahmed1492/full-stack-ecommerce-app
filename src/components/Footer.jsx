@@ -1,129 +1,151 @@
 import Image from "next/image";
+import Link from "next/link";
+
+const LINKS = {
+  Company: [
+    { label: "About Us", href: "/about" },
+    { label: "Careers", href: "/about" },
+    { label: "Blog", href: "/" },
+    { label: "Press", href: "/" },
+    { label: "Contact Us", href: "/contact" },
+  ],
+  Shop: [
+    { label: "All Products", href: "/list?cat=all-products" },
+    { label: "Deals", href: "/deals" },
+    { label: "New Arrivals", href: "/shop" },
+    { label: "Best Sellers", href: "/shop" },
+    { label: "Sale", href: "/deals" },
+  ],
+  Help: [
+    { label: "FAQ", href: "/contact" },
+    { label: "Shipping Info", href: "/contact" },
+    { label: "Returns", href: "/contact" },
+    { label: "Track Order", href: "/orders" },
+    { label: "Support", href: "/contact" },
+  ],
+};
+
+const SOCIALS = [
+  { src: "/facebook.png", alt: "Facebook", href: "#" },
+  { src: "/instagram.png", alt: "Instagram", href: "#" },
+  { src: "/youtube.png", alt: "YouTube", href: "#" },
+  { src: "/x.png", alt: "X", href: "#" },
+  { src: "/pinterest.png", alt: "Pinterest", href: "#" },
+];
+
+const PAYMENTS = [
+  { src: "/visa.png", alt: "Visa" },
+  { src: "/mastercard.png", alt: "Mastercard" },
+  { src: "/paypal.png", alt: "PayPal" },
+  { src: "/skrill.png", alt: "Skrill" },
+];
 
 export default function Footer() {
   return (
-    <div className="flex  lg:justify-between gap-5f\  gap-y-20 flex-wrap justify-center  px-[10%] py-[4%] bg-slate-100 mt-24">
-      {/* LEFT */}
-      <div className="w-[100%] md:w-[50%] text-center lg:text-left   lg:w-[25%] bg-redd-600">
-        <div className="flex flex-col gap-4">
-          <h2 className="text-xl font-medium tracking-wide">Ecommerce</h2>
-          <p className="font-medium text-sm">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis,
-            dicta. Enim recusandae rem saepe!
+    <footer className="bg-gray-900 text-gray-400 mt-24">
+      {/* Top bar */}
+      <div className="border-b border-gray-800 px-[10%] py-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+          {/* Brand */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-[#D02E64] flex items-center justify-center">
+              <Image src="/logo.png" alt="" width={18} height={18} />
+            </div>
+            <span className="text-white text-xl font-bold tracking-tight">Ecommerce</span>
+          </div>
+
+          {/* Newsletter */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+            <p className="text-sm text-gray-400 whitespace-nowrap">Stay in the loop —</p>
+            <div className="flex w-full sm:w-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 sm:w-64 bg-gray-800 border border-gray-700 text-white text-sm px-4 py-2.5 rounded-l-xl outline-none focus:border-[#D02E64] transition placeholder:text-gray-600"
+              />
+              <button className="bg-[#D02E64] hover:bg-[#b02555] text-white text-sm font-semibold px-5 py-2.5 rounded-r-xl transition">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main grid */}
+      <div className="px-[10%] py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* Brand column */}
+        <div className="flex flex-col gap-5">
+          <p className="text-sm text-gray-400 leading-relaxed">
+            Your go-to destination for fashion, accessories, and lifestyle products — curated with care.
           </p>
-          <span className="my-3 font-bold">test123@gmail.com</span>
-          <span className="font-bold text-sm">+123 456 542</span>
+          <div>
+            <p className="text-xs text-gray-600 uppercase tracking-widest mb-1">Email</p>
+            <a href="mailto:support@ecommerce.com" className="text-sm text-gray-300 hover:text-white transition">
+              support@ecommerce.com
+            </a>
+          </div>
+          <div>
+            <p className="text-xs text-gray-600 uppercase tracking-widest mb-1">Phone</p>
+            <a href="tel:+1234567890" className="text-sm text-gray-300 hover:text-white transition">
+              +123 456 7890
+            </a>
+          </div>
+          {/* Socials */}
+          <div className="flex items-center gap-2 mt-1">
+            {SOCIALS.map(({ src, alt, href }) => (
+              <a
+                key={alt}
+                href={href}
+                className="w-8 h-8 rounded-lg bg-gray-800 hover:bg-[#D02E64] flex items-center justify-center transition group"
+                aria-label={alt}
+              >
+                <Image src={src} alt={alt} width={14} height={14} className="object-contain opacity-60 group-hover:opacity-100" />
+              </a>
+            ))}
+          </div>
         </div>
-        {/* ICONS */}
-        <div className="mt-5 flex items-center justify-center lg:justify-start gap-6 flex-wrap">
-          <Image
-            src="/facebook.png"
-            alt=""
-            width={17}
-            height={17}
-            className="object-cover"
-          />
-          <Image
-            src="/instagram.png"
-            alt=""
-            width={17}
-            height={17}
-            className="object-cover"
-          />
-          <Image
-            src="/youtube.png"
-            alt=""
-            width={17}
-            height={17}
-            className="object-cover"
-          />
-          <Image
-            src="/x.png"
-            alt=""
-            width={17}
-            height={17}
-            className="object-cover"
-          />
-        </div>
-        <div className="font-bold mt-8 text-sm">@ 2025 By Ahmed Mohamed</div>
+
+        {/* Link columns */}
+        {Object.entries(LINKS).map(([title, items]) => (
+          <div key={title} className="flex flex-col gap-4">
+            <h3 className="text-white text-sm font-semibold uppercase tracking-widest">
+              {title}
+            </h3>
+            <ul className="flex flex-col gap-2.5">
+              {items.map(({ label, href }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    className="text-sm text-gray-400 hover:text-white hover:translate-x-1 inline-block transition-all duration-200"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      {/* CENTER */}
-      <div className="w-[100%] md:w-[50%]  lg:w-[50%] flex justify-center  bg-bdlue-600">
-        <div className="flex justify-around text-sm w-full fledx-wrap">
-          {/* COMPANY */}
-          <div className="flex   flex-col gap-4">
-            <h2 className="mb-12 text-xl font-bold">COMPANY</h2>
-            <span>About Us</span>
-            <span>Content</span>
-            <span>Blog</span>
-            <span>Sponsers</span>
-            <span>Contact Us</span>
-          </div>
-          {/* SHOP */}
-          <div className="flex flex-col gap-4">
-            <h2 className="mb-12 text-xl font-bold">SHOP</h2>
-            <span>About Us</span>
-            <span>Content</span>
-            <span>Blog</span>
-            <span>Sponsers</span>
-            <span>Contact Us</span>
-          </div>
-          {/* HELP */}
-          <div className="flex flex-col gap-4">
-            <h2 className="mb-12 text-xl font-bold">HELP</h2>
-            <span>About Us</span>
-            <span>Content</span>
-            <span>Blog</span>
-            <span>Sponsers</span>
-            <span>Contact Us</span>
-          </div>
-        </div>
-      </div>
-      {/* RIGHT */}
-      <div className="w-[100%] md:w-[50%] text-center lg:text-left   lg:w-[25%] bg-gdreen-700">
-        <div className="flex flex-col gap-6">
-          <h2 className="text-xl font-bold">SUBSCRIBE</h2>
-          <p className="text-sm">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-            exercitationem est ex perferendis ratione voluptas et optio!
-          </p>
-          <div className="flex justify-center lg:justify-start ">
-            <input type="text" placeholder="Email address" className="p-3" />
-            <button className="p-3 bg-[#d02e64] text-white">JOIN</button>
-          </div>
-          <span className="text-sm  font-bold my-5">Secure Payment</span>
-          <div className="mt-5 flex items-center justify-center lg:justify-start gap-6">
-            <Image
-              src="/mastercard.png"
-              alt=""
-              width={44}
-              height={44}
-              className="object-cover"
-            />
-            <Image
-              src="/paypal.png"
-              alt=""
-              width={44}
-              height={44}
-              className="object-cover"
-            />
-            <Image
-              src="/visa.png"
-              alt=""
-              width={44}
-              height={44}
-              className="object-cover"
-            />
-            <Image
-              src="/skrill.png"
-              alt=""
-              width={44}
-              height={44}
-              className="object-cover"
-            />
-          </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-gray-800 px-[10%] py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p className="text-xs text-gray-600">
+          © 2025 Ecommerce by Ahmed Mohamed. All rights reserved.
+        </p>
+
+        {/* Payment icons */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs text-gray-600 mr-1">Secure payments:</span>
+          {PAYMENTS.map(({ src, alt }) => (
+            <div
+              key={alt}
+              className="bg-gray-800 rounded-lg px-2 py-1.5 flex items-center justify-center"
+            >
+              <Image src={src} alt={alt} width={32} height={20} className="object-contain opacity-70" />
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </footer>
   );
 }

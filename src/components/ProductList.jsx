@@ -1,125 +1,141 @@
 import { wixClientServer } from "@/lib/wixClientServer";
+import { unstable_cache } from "next/cache";
 import AddToCart from "@/components/AddToCart";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import DOMPurify from "isomorphic-dompurify";
 import Pagination from "./Pagination";
-// import { useCartStore } from "@/hooks/userCartStore";
 
-export default async function ProductList({
-  categoryId,
-  limit,
-  searchParams,
-  type,
-}) {
-  const wixClient = await wixClientServer();
-  const productPerPage = 8;
-  let productQuery;
+// Cache product queries for 5 minutes — keyed by all query params
+const getCachedProducts = unstable_cache(
+  async ({ categoryId, limit, name, type, min, max, sortBy, page }) => {
+    const wixClient = await wixClientServer();
+    const productPerPage = 8;
+
+    let query = wixClient.products
+      .queryProducts()
+      .startsWith("name", name || "")
+      .eq("collectionIds", categoryId)
+      .hasSome("productType", type ? [type] : ["physical", "digital"])
+      .gt("priceData.price", min || 0)
+      .lt("priceData.price", max || 999999)
+      .limit(limit || productPerPage)
+      .skip(page ? parseInt(page) * (limit || productPerPage) : 0);
+
+    if (sortBy) {
+      const [dir, field] = sortBy.split(" ");
+      query = dir === "asc" ? query.ascending(field) : query.descending(field);
+    }
+
+    const res = await query.find();
+    return {
+      items: res.items,
+      currentPage: res.currentPage,
+      hasPrev: res.hasPrev(),
+      hasNext: res.hasNext(),
+    };
+  },
+  ["products"],
+  { revalidate: 300 } // 5 min cache
+);
+
+export default async function ProductList({ categoryId, limit, searchParams, type }) {
   let res;
   try {
-    productQuery = wixClient?.products
-      .queryProducts()
-      .startsWith("name", searchParams?.name || "")
-      .eq("collectionIds", categoryId)
-      .hasSome(
-        "productType",
-        searchParams?.Type ? searchParams?.Type : ["physical", "digital"]
-      )
-      .gt("priceData.price", searchParams?.min || 0)
-      .lt("priceData.price", searchParams?.max || 999999)
-      .limit(limit || productPerPage)
-      .skip(
-        searchParams?.page
-          ? parseInt(searchParams.page) * (limit || productPerPage)
-          : 0
-      );
-
-    if (searchParams?.SortBy) {
-      const [sortType, sortBy] = searchParams.SortBy.split(" ");
-
-      if (sortType === "asc") {
-        productQuery = productQuery.ascending(sortBy);
-      } else if (sortType === "desc") {
-        productQuery = productQuery.descending(sortBy);
-      }
-    }
-    // const { addItem } = useCartStore();
-
-    res = await productQuery?.find(); // Ensure sorting is applied before calling `.find()`
+    res = await getCachedProducts({
+      categoryId,
+      limit,
+      name: searchParams?.name,
+      type: searchParams?.Type,
+      min: searchParams?.min,
+      max: searchParams?.max,
+      sortBy: searchParams?.SortBy,
+      page: searchParams?.page,
+    });
   } catch (error) {
     console.log(error);
   }
-  if (res?.items?.length == 0) {
-    return <div>No Items To Show</div>;
+
+  if (!res?.items?.length) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-20 text-gray-400">
+        <Image src="/product.png" alt="" width={64} height={64} className="opacity-20" />
+        <p className="text-lg font-medium">No products found</p>
+        <p className="text-sm">Try adjusting your filters</p>
+      </div>
+    );
   }
 
-  if (!res) return null;
-
   return (
-    <div className="flex items-center gap-x-2 gap-y-9 justify-between flex-wrap ">
-      {res.items.map((item, index) => {
-        // console.log("item >> ", item);
-
-        return (
+    <div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {res.items.map((item) => (
           <div
             key={item._id}
-            className="w-[100%] md:w-[40%] lg:w-[30%] xl:w-[22%] h-max"
+            className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 transition overflow-hidden"
           >
-            <Link href={`/product/${item.slug}`}>
-              <div className="w-full relative h-80">
+            <Link href={`/product/${item.slug}`} prefetch={false}>
+              <div className="relative h-64 bg-gray-50 overflow-hidden">
                 <Image
-                  src={item?.media?.mainMedia.image.url || "/product.png"}
-                  alt=""
-                  className="cursor-pointer object-cover rounded-md absolute z-30 hover:opacity-0 duration-500 ease-in-out"
+                  src={item?.media?.mainMedia?.image?.url || "/product.png"}
+                  alt={item.name}
                   fill
-                  sizes="100%"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="object-cover transition-opacity duration-500 group-hover:opacity-0 absolute z-10"
                 />
-                {item?.media.items && (
+                {item?.media?.items?.[1]?.image?.url && (
                   <Image
-                    src={item.media.items[1]?.image.url || "/product.png"}
-                    alt=""
-                    className="cursor-pointer object-cover rounded-md absolute"
+                    src={item.media.items[1].image.url}
+                    alt={item.name}
                     fill
-                    sizes="100%"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover absolute"
                   />
                 )}
+                {item.discount?.value > 0 && (
+                  <span className="absolute top-3 left-3 z-20 bg-[#D02E64] text-white text-[10px] font-bold px-2 py-1 rounded-full">
+                    -{item.discount.value}%
+                  </span>
+                )}
               </div>
-              <div className="flex items-center justify-between mt-3">
-                <span className="font-bold">{item.name}</span>
-                <span className="font-bold">${+item.price?.price}</span>
+              <div className="px-4 pt-3 pb-1">
+                <p className="font-semibold text-gray-800 text-sm truncate group-hover:text-[#D02E64] transition">
+                  {item.name}
+                </p>
+                {item.additionalInfoSections && (
+                  <div
+                    className="text-gray-400 text-xs mt-1 line-clamp-1"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(
+                        item.additionalInfoSections.find((s) => s?.title === "shortDesc")?.description || ""
+                      ),
+                    }}
+                  />
+                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="font-bold text-gray-900">${+item.price?.price}</span>
+                  {item.price?.discountedPrice && item.price.discountedPrice < item.price.price && (
+                    <span className="text-gray-400 line-through text-xs">${+item.price.discountedPrice}</span>
+                  )}
+                </div>
               </div>
-              {item.additionalInfoSections && (
-                <div
-                  className="text-gray-500 text-sm mt-2"
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(
-                      item.additionalInfoSections.find(
-                        (section) => section?.title === "shortDesc"
-                      )?.description || ""
-                    ),
-                  }}
-                />
-              )}
             </Link>
-            
-            <AddToCart
-              stockNumber={item?.stock?.quantity}
-              variantId={item.variants[0]._id}
-              productId={item?._id}
-            />
-            {/* <button className="px-4 text-sm py-2 bg-transparent border border-red-400 text-red-400 rounded-2xl mt-2">
-            Add to Cart
-          </button> */}
+            <div className="px-4 pb-4 pt-2">
+              <AddToCart
+                stockNumber={item?.stock?.quantity}
+                variantId={item.variants[0]._id}
+                productId={item?._id}
+              />
+            </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
 
-      {type && type == "list" && (
+      {type === "list" && (
         <Pagination
           currentPage={res.currentPage || 0}
-          hasPrev={res.hasPrev()}
-          hasNext={res.hasNext()}
+          hasPrev={res.hasPrev}
+          hasNext={res.hasNext}
         />
       )}
     </div>

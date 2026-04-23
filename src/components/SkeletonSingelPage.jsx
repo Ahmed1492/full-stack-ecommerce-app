@@ -1,74 +1,41 @@
-import React from "react";
-
 export default function SkeletonSingelPage() {
   return (
-    <div className="flex items-center justify-between w-[90%] flex-wrap m-auto   my-5">
-      <div className="mx-auto flex justify-between  items-center gap-[3rem] w-full   h-[19rem]s rounded-lg border11 relative p-4">
-        {/* Simulated image skeleton */}
-        <div className="w-[34%] h-[30rem] bg-gray-200 rounded-md mb-4 animate-pulse"></div>
+    <div className="bg-gray-50 min-h-screen pb-20">
+      {/* Breadcrumb */}
+      <div className="px-[10%] pt-6 pb-2">
+        <div className="h-3 w-48 bg-gray-200 rounded animate-pulse" />
+      </div>
 
-        {/* Text and avatar loading skeleton */}
-        <div className="flex  w-[66%] animate-pulse space-x-4">
-          <div className="w-full">
-            <div className="flex-1 space-y-3 py-1">
-              <div className="h-2 rounded w-[40%] bg-gray-200"></div>
-
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                  {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-                </div>
-              </div>
+      <div className="px-[10%] mt-4 animate-pulse">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm p-6 lg:p-10 flex flex-col lg:flex-row gap-10">
+          {/* Image */}
+          <div className="w-full lg:w-[45%] flex flex-col gap-4">
+            <div className="w-full h-[36rem] bg-gray-100 rounded-2xl" />
+            <div className="flex gap-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-16 h-16 bg-gray-100 rounded-xl" />
+              ))}
             </div>
-            <hr className="my-[2rem]" />
-            <div className="flex-1 space-y-3 py-1">
-              <div className="h-2 rounded w-[40%] bg-gray-200"></div>
+          </div>
 
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                  {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-                </div>
-              </div>
+          {/* Details */}
+          <div className="flex-1 flex flex-col gap-5">
+            <div className="h-4 bg-gray-100 rounded w-20" />
+            <div className="h-8 bg-gray-100 rounded w-3/4" />
+            <div className="h-10 bg-gray-100 rounded w-1/3" />
+            <div className="h-px bg-gray-100" />
+            <div className="flex flex-col gap-2">
+              <div className="h-3 bg-gray-100 rounded w-full" />
+              <div className="h-3 bg-gray-100 rounded w-5/6" />
+              <div className="h-3 bg-gray-100 rounded w-4/6" />
             </div>
-            <hr className="my-[2rem]" />
-            <div className="flex-1 space-y-3 py-1">
-              <div className="h-2 rounded w-[40%] bg-gray-200"></div>
-
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                  {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-                </div>
-              </div>
+            <div className="h-px bg-gray-100" />
+            <div className="flex gap-3">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-10 h-10 bg-gray-100 rounded-full" />
+              ))}
             </div>
-            <hr className="my-[2rem]" />
-            <div className="flex-1 space-y-3 py-1">
-              <div className="h-2 rounded w-[40%] bg-gray-200"></div>
-
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-              <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                  {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-                </div>
-              </div>
-            </div>
+            <div className="h-12 bg-gray-100 rounded-xl w-full" />
           </div>
         </div>
       </div>

@@ -2,52 +2,45 @@ import Link from "next/link";
 import Menu from "@/components/Menu";
 import SearchInput from "@/components/SearchInput";
 import NavIcons from "@/components/NavIcons";
+import NavLinks from "@/components/NavLinks";
 import Image from "next/image";
 import { Suspense } from "react";
+
 export default function Navbar() {
   return (
-    <div className="h-20 sticky top-1 shadow-lg rounded-lg z-50 bg-white px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-[10%] pt-4 ">
-      <div className="md:flex flex-wrap    items-center gap-9">
-        {/*MOBILE SCREAN  */}
-        <div className=" flex items-center justify-between h-full md:hidden">
-          <Link className="text-2xl tracking-wide" href="/">
-            Ecommerce
+    <div className="h-20 sticky top-0 shadow-sm border-b border-gray-100 z-50 bg-white/95 backdrop-blur-sm px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-[10%]">
+      <div className="flex items-center justify-between h-full">
+        {/* MOBILE */}
+        <div className="flex items-center justify-between w-full md:hidden">
+          <Link className="text-xl font-bold tracking-tight flex items-center gap-2" href="/">
+            <Image src="/logo.png" alt="" width={22} height={22} />
+            <span>Ecommerce</span>
           </Link>
-          <Menu />
-        </div>
-        {/* BIGGER SCREAN */}
-
-        <div className="hidden md:flex justify-between items-center w-full  gap-4 h-full ">
-          {/* LEFT */}
-          <div className="w-1/z3">
-            <div className="flex  items-center gap-12">
-              <Link
-                className="text-2xl tracking-wide flex items-center gap-3"
-                href="/"
-              >
-                <Image src="/logo.png" alt="" width={22} height={22} />
-                <span>Ecommerce</span>
-              </Link>
-              {/* LINKS */}
-              <div className=" items-center font-medium gap-4 md:hidden lg:flex">
-                <Link href="/">HomePage</Link>
-                <Link href="/">Shop</Link>
-                <Link href="/">Deals</Link>
-                <Link href="/">About</Link>
-                <Link href="/">Contact</Link>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            <Suspense fallback={null}>
+              <NavIcons />
+            </Suspense>
+            <Menu />
           </div>
-          {/* RIGHT */}
-          <div className=" w-2/3">
-            <div className="flex items-center justify-end gap-3">
-              {/* INPUT */}
-              <SearchInput />
-              {/* ICONS */}
-              <Suspense fallback="Loading...">
-                <NavIcons />
-              </Suspense>
-            </div>
+        </div>
+
+        {/* DESKTOP */}
+        <div className="hidden md:flex items-center justify-between w-full gap-6">
+          {/* Logo */}
+          <Link className="text-xl font-bold tracking-tight flex items-center gap-2 flex-shrink-0" href="/">
+            <Image src="/logo.png" alt="" width={22} height={22} />
+            <span>Ecommerce</span>
+          </Link>
+
+          {/* Nav Links — client for active state */}
+          <NavLinks />
+
+          {/* Right side */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <SearchInput />
+            <Suspense fallback={null}>
+              <NavIcons />
+            </Suspense>
           </div>
         </div>
       </div>

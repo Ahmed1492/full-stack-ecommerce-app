@@ -2,120 +2,202 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const slider = [
+const SLIDES = [
   {
     id: 1,
-    title: "Winter Sale Collection",
-    description: "Sale! Up to 50% off!",
-
-    img: "https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg?_gl=1*44puyi*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzEyMDMkajQxJGwwJGgw",
-
-    url: "/summer-sale",
-    bg: "bg-gradient-to-r from-yellow-50 to-pink-50",
+    badge: "Limited Time",
+    title: "Winter Sale\nCollection",
+    description: "Up to 50% off on selected styles. Don't miss out.",
+    cta: "Shop the Sale",
+    url: "/deals",
+    img: "https://images.pexels.com/photos/3965545/pexels-photo-3965545.jpeg",
+    accent: "#D02E64",
+    bg: "from-rose-950 via-pink-900 to-rose-800",
   },
   {
     id: 2,
-    title: "Summer Warmers",
-    description: "Stay cozy with discounts up to 40%!",
-    img: "https://images.pexels.com/photos/5531551/pexels-photo-5531551.jpeg?_gl=1*14zkx42*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzE0NDQkajYwJGwwJGgw",
-    url: "/winter-warmers",
-    bg: "bg-gradient-to-r from-blue-50 to-gray-50",
+    badge: "New Season",
+    title: "Summer\nWarmers",
+    description: "Stay cozy with fresh arrivals and discounts up to 40%.",
+    cta: "Explore Now",
+    url: "/shop",
+    img: "https://images.pexels.com/photos/5531551/pexels-photo-5531551.jpeg",
+    accent: "#3B82F6",
+    bg: "from-blue-950 via-indigo-900 to-blue-800",
   },
   {
     id: 3,
-    title: "Spring Fresh Arrivals",
-    description: "New arrivals with up to 30% off!",
-
-    img: "https://images.pexels.com/photos/29906028/pexels-photo-29906028.jpeg?_gl=1*112cyfa*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzEyOTEkajYwJGwwJGgw",
-    url: "/spring-fresh",
-    bg: "bg-gradient-to-r from-green-50 to-teal-50",
+    badge: "Just Dropped",
+    title: "Spring Fresh\nArrivals",
+    description: "New arrivals every week. Be the first to wear the latest.",
+    cta: "See What's New",
+    url: "/shop",
+    img: "https://images.pexels.com/photos/29906028/pexels-photo-29906028.jpeg",
+    accent: "#10B981",
+    bg: "from-emerald-950 via-teal-900 to-emerald-800",
   },
   {
     id: 4,
-    title: "Spring Fresh Arrivals",
-    description: "New arrivals with up to 30% off!",
-    url: "/spring-fresh",
-    img: "https://images.pexels.com/photos/15658380/pexels-photo-15658380.jpeg?_gl=1*185zqvo*_ga*Njc2NzgwMDA5LjE3NDc2NzQ1OTk.*_ga_8JE65Q40S6*czE3NTA2MzExMTQkbzQkZzEkdDE3NTA2MzIyNzgkajI2JGwwJGgw",
-
-    bg: "bg-gradient-to-r from-green-50 to-teal-50",
+    badge: "Trending",
+    title: "Street Style\nEssentials",
+    description: "Curated looks for every occasion. Shop the collection.",
+    cta: "Shop Now",
+    url: "/list?cat=all-products",
+    img: "https://images.pexels.com/photos/15658380/pexels-photo-15658380.jpeg",
+    accent: "#F59E0B",
+    bg: "from-amber-950 via-orange-900 to-amber-800",
   },
 ];
 
 export default function HomeSlider() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const handleSlide = (index) => {
-    setCurrentSlide(index);
-    console.log(currentSlide);
-  };
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const next = useCallback(() => setCurrent((p) => (p + 1) % SLIDES.length), []);
+  const prev = useCallback(() => setCurrent((p) => (p - 1 + SLIDES.length) % SLIDES.length), []);
 
   useEffect(() => {
-    const sliderInterval = setInterval(() => {
-      if (currentSlide === slider.length - 1) {
-        setCurrentSlide(0);
-        console.log("first");
-      } else {
-        setCurrentSlide(currentSlide + 1);
-        console.log("second");
-        console.log(currentSlide);
-      }
-    }, 2000);
+    if (paused) return;
+    const t = setInterval(next, 5000);
+    return () => clearInterval(t);
+  }, [paused, next]);
 
-    return () => clearInterval(sliderInterval);
-  }, [currentSlide]);
   return (
-    <div className="overflow-x-hidden w-screen   flex customHeight">
-      <div className={`w-max h-full flex `}>
-        {slider.map((slide, index) => (
+    <div
+      className="relative w-full h-[92vh] max-h-[700px] min-h-[480px] overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* Slides */}
+      {SLIDES.map((slide, index) => {
+        const isActive = index === current;
+        return (
           <div
             key={slide.id}
-            className={`flex w-screen ease-in-out duration-1000   flex-col lg:flex-row h-full bg-dred-500 relative`}
-            style={{ translate: `calc(-100vw * ${currentSlide})` }}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              isActive ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
           >
-            {/* LEFT */}
-            <div
-              className={`${slide.bg} lg:w-1/2 flex flex-col gap-8 justify-center items-center text-center  w-full h-full  bwg-red-600 `}
-            >
-              <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
-                {slide.description}
-              </h2>
-              <h1 className="text-5xl lg:text-6xl 2xl:text-8xl font-bold  w-3/4">
-                {slide.title}
-              </h1>
-              <Link
-                className="bg-black font-medium py-2 px-3 rounded-lg text-white "
-                href={slide.url}
+            {/* Background image */}
+            <Image
+              src={slide.img}
+              alt={slide.title}
+              fill
+              sizes="100vw"
+              className={`object-cover transition-transform duration-[8000ms] ${
+                isActive ? "scale-105" : "scale-100"
+              }`}
+              priority={index === 0}
+            />
+
+            {/* Dark gradient overlay */}
+            <div className={`absolute inset-0 bg-gradient-to-r ${slide.bg} opacity-75`} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+            {/* Content */}
+            <div className="absolute inset-0 flex items-center px-[10%]">
+              <div
+                className={`max-w-xl transition-all duration-700 delay-200 ${
+                  isActive ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+                }`}
               >
-                <button>SHOP NOW</button>
-              </Link>
-            </div>
-            {/* RIGHT */}
-            <div className="lg:w-1/2  w-full  h-full   relative ">
-              <Image
-                className="object-cover"
-                src={slide.img}
-                alt=""
-                fill
-                sizes="100%"
-              />
+                {/* Badge */}
+                <span
+                  className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full mb-5"
+                  style={{ backgroundColor: slide.accent + "33", color: slide.accent, border: `1px solid ${slide.accent}55` }}
+                >
+                  {slide.badge}
+                </span>
+
+                {/* Title */}
+                <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4 whitespace-pre-line drop-shadow-lg">
+                  {slide.title}
+                </h1>
+
+                {/* Description */}
+                <p className="text-white/70 text-base md:text-lg mb-8 max-w-sm leading-relaxed">
+                  {slide.description}
+                </p>
+
+                {/* CTA */}
+                <div className="flex items-center gap-4">
+                  <Link
+                    href={slide.url}
+                    className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:gap-3 hover:shadow-lg"
+                    style={{ backgroundColor: slide.accent }}
+                  >
+                    {slide.cta}
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  </Link>
+                  <Link
+                    href="/list?cat=all-products"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl font-semibold text-sm text-white border border-white/30 hover:bg-white/10 transition-all duration-300"
+                  >
+                    Browse All
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
+        );
+      })}
+
+      {/* Prev / Next arrows */}
+      <button
+        onClick={prev}
+        className="absolute left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 text-white flex items-center justify-center text-xl transition backdrop-blur-sm"
+        aria-label="Previous"
+      >
+        ‹
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-white/10 hover:bg-white/25 border border-white/20 text-white flex items-center justify-center text-xl transition backdrop-blur-sm"
+        aria-label="Next"
+      >
+        ›
+      </button>
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-7 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {SLIDES.map((slide, index) => (
+          <button
+            key={slide.id}
+            onClick={() => setCurrent(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={`rounded-full transition-all duration-300 ${
+              index === current
+                ? "w-7 h-2 bg-white"
+                : "w-2 h-2 bg-white/40 hover:bg-white/70"
+            }`}
+          />
         ))}
-        <div className="absolute bottom-20 right-[50%] translate-x-1/2 flex items-center justify-center gap-6">
-          {slider.map((slide, index) => (
-            <div
-              onClick={() => handleSlide(index)}
-              key={slide.id}
-              className="ring ring-[#6f696c] rounded-full p-2 cursor-pointer"
-            >
-              {index == currentSlide && (
-                <span className="bg-[#D02E64] w-2 h-2 rounded-full flex justify-center items-center "></span>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
+
+      {/* Slide counter */}
+      <div className="absolute bottom-7 right-[10%] z-20 text-white/50 text-xs font-medium tabular-nums">
+        {String(current + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}
+      </div>
+
+      {/* Progress bar */}
+      {!paused && (
+        <div className="absolute bottom-0 left-0 right-0 z-20 h-0.5 bg-white/10">
+          <div
+            key={current}
+            className="h-full bg-white/60"
+            style={{ animation: "progress 5s linear forwards" }}
+          />
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes progress {
+          from { width: 0% }
+          to   { width: 100% }
+        }
+      `}</style>
     </div>
   );
 }

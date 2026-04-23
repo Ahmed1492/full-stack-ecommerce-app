@@ -1,3 +1,4 @@
+    // "mongoose": "^9.5.0",
 
 # 🛍️ Next.js E-Commerce App
 

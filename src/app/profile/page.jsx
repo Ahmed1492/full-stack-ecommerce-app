@@ -1,33 +1,25 @@
 import React from "react";
-import UpdateUser from "@/components/UpdateUser";
-import OrderHistory from "@/components/OrderHistory";
 import { wixClientServer } from "@/lib/wixClientServer";
 import { members } from "@wix/members";
-import LoginFirst from "@/components/LoginFirst";
-export default async function page() {
+import { redirect } from "next/navigation";
+import ProfileClient from "@/components/ProfileClient";
+
+export default async function ProfilePage() {
   const wixClient = await wixClientServer();
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  if (!isLoggedIn) return <LoginFirst />;
+  if (!isLoggedIn) redirect("/login");
 
-  let member;
-
+  let member = null;
   try {
-    member = await wixClient?.members?.getCurrentMember({
+    const res = await wixClient?.members?.getCurrentMember({
       fieldsets: [members.Set.FULL],
     });
+    member = res?.member || null;
+    console.log("member _id:", member?._id, "contactId:", member?.contactId);
   } catch (error) {
     console.log(error);
   }
-  console.log("member ", member?.member);
-  return (
-    <div className="flex items-center1 justify-between w-[80%] mt-3 m-auto">
-      <div className="xl:w-[30rem]">
-        <UpdateUser user={member?.member} />
-      </div>
-      <div className="xl:w-[41rem] mt-3">
-        <OrderHistory user={member?.member} />
-      </div>
-    </div>
-  );
+
+  return <ProfileClient user={member} />;
 }

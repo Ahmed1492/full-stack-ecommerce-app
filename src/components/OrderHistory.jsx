@@ -12,9 +12,7 @@ export default async function OrderHistory({ user }) {
 
   const getUserOrders = async () => {
     try {
-      let myResponse = await axios.get(
-        `http://localhost:2000/userOrders/${userId}`
-      );
+      let myResponse = await axios.get(`/api/userOrders/${userId}`);
 
       return myResponse?.data?.result;
     } catch (error) {

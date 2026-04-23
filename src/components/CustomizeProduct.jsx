@@ -1,144 +1,116 @@
 "use client";
 import { useEffect, useState } from "react";
 import AddProduct from "./AddProduct";
-export default function CustomizeProduct({
-  productId,
-  variants,
-  productOptions,
-  stockNumber,
-}) {
-  // console.log(productOptions);
-  const [selectedOption, setSelectedOption] = useState({});
-  const [selectedVariant, setSelectedVarient] = useState();
-  const [quantity, setQuantity] = useState(0);
 
-  const handleOptionSelect = (optionType, choice, disable) => {
-    if (!disable) {
-      setSelectedOption((prev) => ({ ...prev, [optionType]: choice }));
-      // console.log("selectedOption ", selectedOption);
-      // console.log("choice ", choice);
-    }
-    setQuantity(0);
-  };
-  console.log("variants", variants);
-  const isVariantsInStock = (choices) => {
-    return variants.some((variant) => {
-      const variantChoices = variant.choices;
-      if (!variantChoices) return false;
-      return (
-        variant.stock &&
-        variant.stock.inStock &&
-        variant.stock.quantity > 0 &&
-        Object.entries(choices).every(
-          ([key, value]) => variant.choices?.[key] === value
-        )
-      );
-    });
-  };
+export default function CustomizeProduct({ productId, variants, productOptions, stockNumber }) {
+  const [selectedOption, setSelectedOption] = useState({});
+  const [selectedVariant, setSelectedVariant] = useState();
+
+  const isVariantInStock = (choices) =>
+    variants.some(
+      (v) =>
+        v.stock?.inStock &&
+        v.stock?.quantity > 0 &&
+        v.choices &&
+        Object.entries(choices).every(([k, val]) => v.choices[k] === val)
+    );
+
   useEffect(() => {
-    const varient = variants.find((v) => {
-      const varientChoice = v.choices;
-      if (!varientChoice) return false;
-      return Object.entries(selectedOption).every(
-        ([key, value]) => varientChoice[key] == value
-      );
-    });
-    setSelectedVarient(varient);
+    const variant = variants.find(
+      (v) =>
+        v.choices &&
+        Object.entries(selectedOption).every(([k, val]) => v.choices[k] === val)
+    );
+    setSelectedVariant(variant);
   }, [selectedOption, variants]);
 
-  return (
-    <div className="flex flex-col gap-5">
-      {stockNumber < 1 ? (
-        ""
-      ) : (
-        <div className="flex flex-col gap-5">
-          {productOptions.map((option, index) => (
-            <div className="flex flex-col gap-2" key={index}>
-              <h3 className="font-medium text-xl">Choose a {option.name} </h3>
-              <div className="flex gap-2">
-                {option?.choices.map((choice, index) => {
-                  const disable = !isVariantsInStock({
-                    ...selectedOption,
-                    [option.name]: choice.description,
-                  });
-                  const selected =
-                    selectedOption[option.name] === choice.description;
-                  return option.name == "Color" ? (
-                    <div
-                      onClick={() =>
-                        handleOptionSelect(
-                          option.name,
-                          choice.description,
-                          disable
-                        )
-                      }
-                      key={index}
-                      className="flex mt-2 gap-2"
-                    >
-                      <div
-                        className={` border ${
-                          selected ? "ring-2 ring-blue-400 " : ""
-                        }   flex justify-center cursor-pointer items-center rounded-full w-11 h-11 relative`}
-                      >
-                        <span
-                          style={{
-                            backgroundColor: choice.description,
-                            cursor: disable ? "not-allowed" : "pointer",
-                          }}
-                          className=" w-9 h-9  rounded-full"
-                        ></span>
-                        {disable && (
-                          <span className="w-1 h-14 absolute rounded-2xl bg-red-400  -rotate-45" />
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div
-                      onClick={() =>
-                        handleOptionSelect(
-                          option.name,
-                          choice.description,
-                          disable
-                        )
-                      }
-                      key={index}
-                      className="flex  items-center gap-3"
-                    >
-                      <button
-                        className={` px-[10px] border w-24 text-center font-medium py-[8px] text-white rounded-xl`}
-                        style={{
-                          backgroundColor: selected
-                            ? "#f35c7a"
-                            : disable
-                            ? "#FBCFE8"
-                            : "white",
-                          color: selected || disable ? "white" : "#f35c7a",
-                          cursor: disable ? "not-allowed" : "pointer",
-                        }}
-                      >
-                        {choice.value}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {/* COLORS */}
+  if (stockNumber < 1) {
+    return (
+      <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-2xl px-4 py-3">
+        <span className="text-red-400 text-lg">⚠️</span>
+        <p className="text-red-500 font-medium text-sm">Out of Stock</p>
+      </div>
+    );
+  }
 
-      {/* COLORS / */}
+  return (
+    <div className="flex flex-col gap-6">
+      {productOptions.map((option) => (
+        <div key={option.name} className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-gray-700 text-sm">
+              {option.name}
+              {selectedOption[option.name] && (
+                <span className="ml-2 font-normal text-gray-400">
+                  — {selectedOption[option.name]}
+                </span>
+              )}
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {option.choices.map((choice) => {
+              const disabled = !isVariantInStock({
+                ...selectedOption,
+                [option.name]: choice.description,
+              });
+              const selected = selectedOption[option.name] === choice.description;
+
+              if (option.name === "Color") {
+                return (
+                  <button
+                    key={choice.description}
+                    onClick={() =>
+                      !disabled &&
+                      setSelectedOption((p) => ({ ...p, [option.name]: choice.description }))
+                    }
+                    title={choice.description}
+                    className={`relative w-10 h-10 rounded-full border-2 transition flex-shrink-0 ${
+                      selected ? "border-[#D02E64] scale-110 shadow-md" : "border-transparent hover:border-gray-300"
+                    } ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}`}
+                  >
+                    <span
+                      className="absolute inset-1 rounded-full"
+                      style={{ backgroundColor: choice.description }}
+                    />
+                    {disabled && (
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="w-0.5 h-8 bg-red-400 rotate-45 rounded-full absolute" />
+                      </span>
+                    )}
+                  </button>
+                );
+              }
+
+              return (
+                <button
+                  key={choice.description}
+                  onClick={() =>
+                    !disabled &&
+                    setSelectedOption((p) => ({ ...p, [option.name]: choice.description }))
+                  }
+                  disabled={disabled}
+                  className={`px-4 py-2 rounded-xl border text-sm font-medium transition ${
+                    selected
+                      ? "border-[#D02E64] bg-[#D02E64] text-white"
+                      : disabled
+                      ? "border-gray-100 bg-gray-50 text-gray-300 cursor-not-allowed line-through"
+                      : "border-gray-200 text-gray-700 hover:border-[#D02E64] hover:text-[#D02E64]"
+                  }`}
+                >
+                  {choice.value}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
       <AddProduct
-        quantity={quantity}
-        setQuantity={setQuantity}
         productId={productId}
-        variantId={
-          selectedVariant?._id || "00000000-0000-0000-0000-000000000000"
-        }
+        variantId={selectedVariant?._id || "00000000-0000-0000-0000-000000000000"}
         stockNumber={selectedVariant?.stock?.quantity || 0}
       />
-      {/* {console.log("selectedVariant :  ", selectedVariant)} */}
     </div>
   );
 }

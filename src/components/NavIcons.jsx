@@ -2,9 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import ShoppingProductList from "@/components/ShoppingProductList";
-import SkeletonCart from "@/components/SkeletonCart";
 import Notifications from "@/components/Notifications";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
@@ -17,35 +16,45 @@ export default function NavIcons() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-
   const [total, setTotal] = useState(0);
+
+  const cartRef = useRef(null);
+  const profileRef = useRef(null);
+  const notifRef = useRef(null);
 
   const router = useRouter();
   const wixClient = useWixClient();
-
-  // let isLoggedIn = wixClient.auth.loggedIn();
-
   const pathName = usePathname();
-  // console.log("====================================");
-  // console.log("pathName ", pathName);
-  // console.log("isLoggedIn ", isLoggedIn);
-  // console.log("====================================");
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (cartRef.current && !cartRef.current.contains(e.target)) setIsCartOpen(false);
+      if (profileRef.current && !profileRef.current.contains(e.target)) setIsProfileOpen(false);
+      if (notifRef.current && !notifRef.current.contains(e.target)) setIsNotificationsOpen(false);
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   const handleProfile = () => {
-    setIsProfileOpen(!isProfileOpen);
+    setIsCartOpen(false);
+    setIsNotificationsOpen(false);
+    setIsProfileOpen((prev) => !prev);
   };
 
   const handleCart = () => {
     setIsProfileOpen(false);
+    setIsNotificationsOpen(false);
     setIsCartOpen((prev) => !prev);
   };
+
   const handleLogOut = async () => {
     Cookies.remove("refreshToken");
     setIsLoading(true);
-    setIsLoggedIn(false); // Update local state immediately
+    setIsLoggedIn(false);
     try {
-      await wixClient.auth.logout(); // Important!
-      const status = await wixClient.auth.loggedIn();
-      // console.log("Still logged in after logout?", status); // Should be false
+      await wixClient.auth.logout();
     } catch (error) {
       console.log(error);
     } finally {
@@ -54,198 +63,227 @@ export default function NavIcons() {
       router.push("/login");
     }
   };
-  const { getNotifications, notifications } = useNotificationStore();
+
+  const { getNotifications, markAllSeen } = useNotificationStore();
   const { getCart, counter, cart } = useCartStore();
-
   const { counter: notCounter, clearNotifications } = useNotificationStore();
-
-  const pathname = usePathname(); // tells us where we are now
-
-  const [loading, setLoading] = useState(false);
-
-  const handleCheckout = () => {
-    if (!cart?.lineItems?.length) return;
-
-    setLoading(true);
-    router.push("/checkout");
-
-    setTimeout(() => {
-      setIsCartOpen(false);
-      setLoading(false);
-    }, 1000); // 3000ms = 3 seconds
-  };
 
   const delteNotifications = () => {
     if (localStorage.getItem("notifications")) {
       localStorage.removeItem("notifications");
       clearNotifications();
     }
-    return;
   };
-  useEffect(() => {
-    getCart(wixClient);
-  }, []);
 
+  useEffect(() => { getCart(wixClient); }, []);
   useEffect(() => {
     const checkLogin = async () => {
       const status = await wixClient.auth.loggedIn();
       setIsLoggedIn(status);
     };
     checkLogin();
-  }, [pathName, isLoggedIn]);
-
-  useEffect(() => {
-    getNotifications(); // fetch and store in Zustand
-  }, []);
+  }, [pathName]);
+  // getNotifications is called inside Notifications.jsx — no need to call it here too
 
   useMemo(() => {
     if (cart?.lineItems) {
-      let totalCart = cart.lineItems.reduce((sum, item) => {
-        return sum + item.quantity * +item.price.amount;
-      }, 0);
-
+      const totalCart = cart.lineItems.reduce(
+        (sum, item) => sum + item.quantity * +item.price.amount, 0
+      );
       setTotal(totalCart);
-      // console.log("Total from nav:", total);
     }
   }, [cart?.lineItems]);
 
   return (
-    <div className="flex items-center  gap-6">
-      <div className="relative  min-w-9 ">
+    <div className="flex items-center gap-6">
+
+      {/* Profile */}
+      <div className="relative min-w-9" ref={profileRef}>
         <Image
-          className="cursor-pointer ms-[1rem] "
+          className="cursor-pointer ms-[1rem] hover:opacity-75 transition"
           src="/profile.png"
           alt=""
           width={22}
           height={22}
           onClick={handleProfile}
-          // href="/profile"
-          // onClick={login}
         />
-        {isProfileOpen &&
-          (isLoggedIn ? (
-            <>
-              <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
-                <Link
-                  className={`duration-500 hover:text-[#D02E64] ${
-                    pathName === "/profile" && "text-[#D02E64]"
-                  } `}
-                  href="/profile"
-                >
-                  <div className="flex items-center gap-2">
-                    <Image src="/mprofile.svg" alt="" width={22} height={20} />
-                    <span>Profile</span>
+        {isProfileOpen && (
+          <div className="absolute top-10 -right-2 z-30 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+            {isLoggedIn ? (
+              <>
+                {/* User header */}
+                <div className="px-4 py-3 bg-gradient-to-r from-[#D02E64] to-[#a0204a]">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      👤
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-white text-xs font-semibold truncate">My Account</p>
+                      <p className="text-pink-200 text-[10px] truncate">Manage your profile</p>
+                    </div>
                   </div>
-                </Link>
-                <div className="flex items-center gap-2">
-                  <Image src="/logout.svg" alt="" width={22} height={20} />
-                  <span
-                    onClick={handleLogOut}
-                    className=" duration-500 cursor-pointer hover:text-[#D02E64] "
-                  >
-                    {isLoading ? "loading..." : "LogOut"}
-                  </span>
                 </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col gap-3 shadow-lg bg-white rounded-md px-4 py-3 absolute top-8 min-w-36 font-medium -left-9 z-30 ">
+                {/* Links */}
+                <div className="p-2 flex flex-col gap-0.5">
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsProfileOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition ${
+                      pathName === "/profile" ? "bg-pink-50 text-[#D02E64]" : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <Image src="/mprofile.svg" alt="" width={16} height={16} />
+                    Profile
+                  </Link>
+                  <Link
+                    href="/orders"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+                  >
+                    <Image src="/order.svg" alt="" width={16} height={16} />
+                    My Orders
+                  </Link>
+                  <div className="h-px bg-gray-100 my-1" />
+                  <button
+                    onClick={handleLogOut}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition w-full text-left"
+                  >
+                    <Image src="/logout.svg" alt="" width={16} height={16} />
+                    {isLoading ? "Signing out..." : "Sign Out"}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="p-3 flex flex-col gap-2">
+                <p className="text-xs text-gray-400 px-2 pt-1 pb-0.5">Not signed in</p>
                 <Link
-                  className={`hover:text-[#D02E64] ${
-                    pathName === "/login" && "text-[#D02E64]"
-                  } `}
                   href="/login"
+                  onClick={() => setIsProfileOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#D02E64] text-white text-sm font-semibold rounded-xl hover:bg-[#b02555] transition"
                 >
-                  Log in
+                  Sign In
+                </Link>
+                <Link
+                  href="/login"
+                  onClick={() => setIsProfileOpen(false)}
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition"
+                >
+                  Create Account
                 </Link>
               </div>
-            </>
-          ))}
+            )}
+          </div>
+        )}
       </div>
-      <div className="relative">
+
+      {/* Notifications */}
+      <div className="relative" ref={notifRef}>
         <Image
-          className="cursor-pointer min-w-[22px] "
+          className="cursor-pointer min-w-[22px] hover:opacity-75 transition"
           src="/notification.png"
           alt=""
           width={22}
           height={22}
-          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+          onClick={() => {
+            setIsCartOpen(false);
+            setIsProfileOpen(false);
+            const opening = !isNotificationsOpen;
+            setIsNotificationsOpen(opening);
+            if (opening) markAllSeen();
+          }}
         />
-        <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-sm text-white">
+        <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xs text-white font-bold">
           {isLoggedIn ? notCounter : 0}
         </span>
         {isNotificationsOpen && (
-          <div className="flex flex-col max-h-[34rem] overflow-y-auto   gap-2 shadow-2xl bg-white min-w-max rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
-            <div className="flex items-center gap-2">
-              <Image src="/notification.svg" alt="" width={34} height={30} />
-              <h2 className="text-2xl my-3">Notifications</h2>
+          <div className="flex flex-col max-h-[34rem] overflow-y-auto gap-2 shadow-xl bg-white min-w-max rounded-xl p-4 absolute top-9 -right-2 z-30 border border-gray-100">
+            <div className="flex items-center justify-between gap-4 mb-1">
+              <div className="flex items-center gap-2">
+                <Image src="/notification.svg" alt="" width={24} height={24} />
+                <h2 className="text-lg font-semibold">Notifications</h2>
+              </div>
+              {notCounter !== 0 && (
+                <button
+                  onClick={delteNotifications}
+                  className="text-xs text-blue-400 hover:text-blue-600 transition font-medium"
+                >
+                  Clear All
+                </button>
+              )}
             </div>
-            {notCounter !== 0 && (
-              <button
-                onClick={delteNotifications}
-                className="flex justify-end w-max text-left self-end text-blue-400 font-medium cursor-pointer"
-              >
-                Clear All
-              </button>
-            )}
-            <Suspense fallback="Loading...">
-              <Notifications />
+            <Suspense fallback={<p className="text-sm text-gray-400">Loading...</p>}>
+              <Notifications onClose={() => setIsNotificationsOpen(false)} />
             </Suspense>
           </div>
         )}
       </div>
-      <div className="relative min-w-9 z-50 ">
+
+      {/* Cart */}
+      <div className="relative min-w-9 z-50" ref={cartRef}>
         <Image
-          className="cursor-pointer  "
+          className="cursor-pointer hover:opacity-75 transition"
           src="/cart.png"
           alt=""
           width={22}
           height={22}
           onClick={handleCart}
         />
-        <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-sm text-white">
+        <span className="absolute -top-2 left-3 bg-red-500 rounded-full w-5 h-5 flex items-center justify-center text-xs text-white font-bold">
           {counter}
         </span>
+
         {isCartOpen && (
-          <div className="flex flex-col min-w-[23rem] max-h-[34rem] overflow-y-auto    gap-5 shadow-2xl bg-white  rounded-lg p-4 absolute top-9 font-medium -right-2 z-30 ">
-            <div className="flex items-center gap-2">
-              <Image src="/cart2.svg" alt="" width={34} height={30} />
-
-              <h2 className="text-2xl my-3">Shopping Cart</h2>
-            </div>
-
-            <Suspense fallback={<SkeletonCart />}>
-              <ShoppingProductList />
-            </Suspense>
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-bold">Subtotal</span>
-                <span className="text-lg font-bold">${total || 0}</span>
-              </div>
-              <p className="text-gray-500 font-medium">
-                Lorem ipsum dolor sit amet.
-              </p>
-              <div className="flex items-center justify-between mt-6">
-                <button className="bg-white  border-1   border-gray-400 border hover:bg-black hover:text-white  transition-all duration-200 text-sm py-3 px-3 rounded-md">
-                  View Cart
-                </button>
-
-                {cart?.lineItems && (
-                  <button
-                    onClick={handleCheckout}
-                    disabled={loading || !cart?.lineItems?.length}
-                    className={`border text-sm py-3 px-4 rounded-md transition-all duration-200 ${
-                      cart?.lineItems?.length
-                        ? "bg-black text-white hover:bg-white hover:text-black"
-                        : "bg-slate-300 text-gray-500 cursor-not-allowed"
-                    }`}
-                  >
-                    {loading ? "Loading..." : "Checkout"}
-                  </button>
+          <div
+            className="flex flex-col w-[22rem] max-h-[34rem] shadow-2xl bg-white rounded-2xl absolute top-10 -right-2 z-30 border border-gray-100 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cart Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <Image src="/cart2.svg" alt="" width={22} height={22} />
+                <h2 className="text-base font-semibold text-gray-800">Shopping Cart</h2>
+                {counter > 0 && (
+                  <span className="text-xs bg-gray-100 text-gray-500 rounded-full px-2 py-0.5">{counter}</span>
                 )}
               </div>
+              <button
+                onClick={() => setIsCartOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition text-lg leading-none"
+              >
+                ✕
+              </button>
             </div>
+
+            {/* Items — scrollable */}
+            <div className="flex-1 overflow-y-auto px-4 py-3 scrollbar-hidden">
+              <ShoppingProductList />
+            </div>
+
+            {/* Footer */}
+            {cart?.lineItems?.length > 0 && (
+              <div className="border-t border-gray-100 px-5 py-4 bg-gray-50">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-500">Subtotal</span>
+                  <span className="text-base font-bold text-gray-900">${total.toFixed(2)}</span>
+                </div>
+                <div className="flex gap-2">
+                  <Link
+                    href="/cart"
+                    onClick={() => setIsCartOpen(false)}
+                    className="flex-1 text-center py-2.5 rounded-xl border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-100 transition"
+                  >
+                    View Cart
+                  </Link>
+                  <Link
+                    href="/checkout"
+                    onClick={() => setIsCartOpen(false)}
+                    className="flex-1 text-center py-2.5 rounded-xl bg-[#D02E64] text-white text-sm font-medium hover:bg-[#b02555] transition"
+                  >
+                    Checkout
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

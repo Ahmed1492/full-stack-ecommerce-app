@@ -1,33 +1,42 @@
 import React from "react";
 import CheckoutDetails from "@/components/CheckoutDetails";
-// import UserInfo from "@/components/UserInfo";
 import OrderSummary from "@/components/OrderSummary.jsx";
-import LoginFirst from "@/components/LoginFirst.jsx";
 import { members } from "@wix/members";
 import { wixClientServer } from "@/lib/wixClientServer";
-import { useCartStore } from "@/hooks/userCartStore";
-import axios from "axios";
-export default async function page() {
-  const wixClient = await wixClientServer();
+import { redirect } from "next/navigation";
 
+export default async function CheckoutPage() {
+  const wixClient = await wixClientServer();
   const isLoggedIn = wixClient.auth.loggedIn();
 
-  if (!isLoggedIn) {
-    return <LoginFirst />;
-  }
+  if (!isLoggedIn) redirect("/login");
 
   const member = await wixClient.members.getCurrentMember({
     fieldsets: [members.Set.FULL],
   });
 
   return (
-    <div className="flex flex-col-reverse md:flex-row gap-y-6 flex-wrap xl:flex-nowrap xl:justify-center pt-5 gap-3 w-[70%] m-auto">
-      <div className="w-[100%] md:w-[53%] lg:w-[55%] xl:w-[37rem]">
-        <CheckoutDetails user={member?.member} />
-        {/* <UserInfo /> */}
-      </div>
-      <div className="w-[100%] md:w-[45%] lg:w-[40%] xl:w-[25rem]">
-        <OrderSummary user={member?.member} />
+    <div className="min-h-screen bg-gray-50 py-10">
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Checkout</h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            Complete your order below
+          </p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          {/* LEFT — Delivery + Payment */}
+          <div className="w-full lg:flex-1">
+            <CheckoutDetails user={member?.member} />
+          </div>
+
+          {/* RIGHT — Order Summary */}
+          <div className="w-full lg:w-[22rem] sticky top-6">
+            <OrderSummary user={member?.member} />
+          </div>
+        </div>
       </div>
     </div>
   );

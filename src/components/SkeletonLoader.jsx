@@ -1,90 +1,19 @@
 import React from "react";
 
-const SkeletonLoader = () => {
+export default function SkeletonLoader({ count = 8 }) {
   return (
-    <div className="flex items-center justify-between flex-wrap  m-auto my-5">
-      <div className="mx-auto  w-[22rem] flex flex-col justify-between  h-[19rem]s rounded-lg border11 relative p-4">
-        {/* Simulated image skeleton */}
-        <div className="w-full h-[16rem] bg-gray-200 rounded-md mb-4 animate-pulse"></div>
-
-        {/* Text and avatar loading skeleton */}
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-2 rounded w-[94%] bg-gray-200"></div>
-
-            <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-              </div>
-            </div>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 animate-pulse">
+      {[...Array(count)].map((_, i) => (
+        <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          <div className="h-64 bg-gray-100" />
+          <div className="px-4 py-3 flex flex-col gap-2">
+            <div className="h-3 bg-gray-100 rounded w-3/4" />
+            <div className="h-3 bg-gray-100 rounded w-1/2" />
+            <div className="h-3 bg-gray-100 rounded w-1/4 mt-1" />
+            <div className="h-8 bg-gray-100 rounded-xl mt-2" />
           </div>
         </div>
-      </div>
-      <div className="mx-auto w-[22rem] flex flex-col justify-between  h-[19rem]s rounded-lg border11 relative p-4">
-        {/* Simulated image skeleton */}
-        <div className="w-full h-[16rem] bg-gray-200 rounded-md mb-4 animate-pulse"></div>
-
-        {/* Text and avatar loading skeleton */}
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-2 rounded w-[94%] bg-gray-200"></div>
-
-            <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto w-[22rem] flex flex-col justify-between  h-[19rem]s rounded-lg border11 relative p-4">
-        {/* Simulated image skeleton */}
-        <div className="w-full h-[16rem] bg-gray-200 rounded-md mb-4 animate-pulse"></div>
-
-        {/* Text and avatar loading skeleton */}
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-2 rounded w-[94%] bg-gray-200"></div>
-
-            <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto w-[22rem] flex flex-col justify-between  h-[19rem]s rounded-lg border11 relative p-4">
-        {/* Simulated image skeleton */}
-        <div className="w-full h-[16rem] bg-gray-200 rounded-md mb-4 animate-pulse"></div>
-
-        {/* Text and avatar loading skeleton */}
-        <div className="flex animate-pulse space-x-4">
-          <div className="flex-1 space-y-3 py-1">
-            <div className="h-2 rounded w-[94%] bg-gray-200"></div>
-
-            <div className="h-2 rounded bg-gray-200 w-3/4"></div>
-
-            <div className="space-y-3">
-              <div className="grid grid-cols-3 gap-4">
-                <div className="col-span-1 h-2 rounded bg-gray-200"></div>
-                {/* <div className="col-span-2 h-2 rounded bg-gray-200"></div> */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>{" "}
+      ))}
     </div>
   );
-};
-
-export default SkeletonLoader;
+}
