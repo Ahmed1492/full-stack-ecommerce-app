@@ -3,10 +3,10 @@
 A full-featured, production-ready **online shopping platform** built with **Next.js 14**, featuring a modern UI, real product data via Wix SDK, MongoDB backend, and a complete user experience from browsing to checkout.
 
 ## 🚀 Live Demo
-
 🔗 **[trenova-git-main-ahmed1492s-projects.vercel.app](https://trenova-git-main-ahmed1492s-projects.vercel.app/)**
 
-🔗 **[Recorded Demo](https://www.linkedin.com/posts/activity-7342732677650812928-Jbv-)**
+## 🎥 Recorded Demo
+🔗 **[View on LinkedIn](https://www.linkedin.com/posts/activity-7342732677650812928-Jbv-)**
 ---
 
 ## ✨ Features
