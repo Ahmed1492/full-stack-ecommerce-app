@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .customHeight {
   height: calc(100vh - 104px) !important;
 }
