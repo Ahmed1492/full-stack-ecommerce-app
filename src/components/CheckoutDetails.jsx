@@ -186,7 +186,7 @@ const CheckoutDetails = ({ user }) => {
             </div>
             <h2 className="text-2xl font-extrabold text-gray-900">Order Placed!</h2>
             <p className="text-gray-500 text-sm text-center leading-relaxed">
-              Your order has been confirmed. We're preparing it for you right now.
+              Your order has been confirmed. We&apos;re preparing it for you right now.
             </p>
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
               <svg className="animate-spin h-3.5 w-3.5" viewBox="0 0 24 24" fill="none">
@@ -358,9 +358,9 @@ const CheckoutDetails = ({ user }) => {
         )}
       </button>
 
-      <p className="text-center text-xs text-gray-400 mt-3">
+      <div className="text-center text-xs text-gray-400 mt-3">
         🔒 Your payment info is encrypted and secure
-      </p>
+      </div>
     </div>
   );
 };

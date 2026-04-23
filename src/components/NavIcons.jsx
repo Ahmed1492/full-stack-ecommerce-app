@@ -75,13 +75,14 @@ export default function NavIcons() {
     }
   };
 
-  useEffect(() => { getCart(wixClient); }, []);
+  useEffect(() => { getCart(wixClient); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const checkLogin = async () => {
       const status = await wixClient.auth.loggedIn();
       setIsLoggedIn(status);
     };
     checkLogin();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathName]);
   // getNotifications is called inside Notifications.jsx — no need to call it here too
 

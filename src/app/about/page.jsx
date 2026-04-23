@@ -79,7 +79,7 @@ export default function AboutPage() {
               Our platform connects you with the best brands and independent designers from around the world.
             </p>
             <p className="text-gray-500 text-sm leading-relaxed">
-              From everyday essentials to statement pieces, we've got something for every style,
+              From everyday essentials to statement pieces, we&apos;ve got something for every style,
               every occasion, and every budget.
             </p>
             <Link

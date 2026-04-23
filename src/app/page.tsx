@@ -15,10 +15,17 @@ const HomePage = async () => {
       <section className="px-[10%] mt-20">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">Handpicked</p>
-            <h2 className="text-2xl font-bold text-gray-900">Featured Products</h2>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">
+              Handpicked
+            </p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Featured Products
+            </h2>
           </div>
-          <Link href="/shop" className="text-sm text-[#D02E64] hover:underline font-medium">
+          <Link
+            href="/shop"
+            className="text-sm text-[#D02E64] hover:underline font-medium"
+          >
             View all →
           </Link>
         </div>
@@ -36,11 +43,29 @@ const HomePage = async () => {
       <section className="px-[10%] mt-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { emoji: "🚚", title: "Free Shipping", sub: "On all orders over $50", bg: "from-blue-50 to-indigo-50" },
-            { emoji: "🔥", title: "Hot Deals Daily", sub: "New discounts every day", bg: "from-pink-50 to-rose-50" },
-            { emoji: "↩️", title: "Easy Returns", sub: "30-day hassle-free returns", bg: "from-green-50 to-emerald-50" },
+            {
+              emoji: "🚚",
+              title: "Free Shipping",
+              sub: "On all orders over $50",
+              bg: "from-blue-50 to-indigo-50",
+            },
+            {
+              emoji: "🔥",
+              title: "Hot Deals Daily",
+              sub: "New discounts every day",
+              bg: "from-pink-50 to-rose-50",
+            },
+            {
+              emoji: "↩️",
+              title: "Easy Returns",
+              sub: "30-day hassle-free returns",
+              bg: "from-green-50 to-emerald-50",
+            },
           ].map((b) => (
-            <div key={b.title} className={`bg-gradient-to-br ${b.bg} rounded-2xl px-6 py-5 flex items-center gap-4 border border-white shadow-sm`}>
+            <div
+              key={b.title}
+              className={`bg-gradient-to-br ${b.bg} rounded-2xl px-6 py-5 flex items-center gap-4 border border-white shadow-sm`}
+            >
               <span className="text-3xl">{b.emoji}</span>
               <div>
                 <p className="font-bold text-gray-800 text-sm">{b.title}</p>
@@ -55,10 +80,17 @@ const HomePage = async () => {
       <section className="mt-20">
         <div className="px-[10%] flex items-end justify-between mb-7">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">Browse</p>
-            <h2 className="text-2xl font-bold text-gray-900">Shop by Category</h2>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">
+              Browse
+            </p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              Shop by Category
+            </h2>
           </div>
-          <Link href="/list?cat=all-products" className="text-sm text-[#D02E64] hover:underline font-medium">
+          <Link
+            href="/list?cat=all-products"
+            className="text-sm text-[#D02E64] hover:underline font-medium"
+          >
             All categories →
           </Link>
         </div>
@@ -69,10 +101,15 @@ const HomePage = async () => {
       <section className="px-[10%] mt-20 mb-20">
         <div className="flex items-end justify-between mb-7">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">Just In</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#D02E64] mb-1">
+              Just In
+            </p>
             <h2 className="text-2xl font-bold text-gray-900">New Arrivals</h2>
           </div>
-          <Link href="/shop" className="text-sm text-[#D02E64] hover:underline font-medium">
+          <Link
+            href="/shop"
+            className="text-sm text-[#D02E64] hover:underline font-medium"
+          >
             View all →
           </Link>
         </div>

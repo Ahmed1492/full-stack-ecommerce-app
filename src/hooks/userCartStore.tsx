@@ -18,22 +18,22 @@ type CartState = {
   isLoading: boolean;
   counter: number;
 
-  getCart: (wixClient: WixClientType, isLoggedIn: boolean) => Promise<void>;
+  getCart: (wixClient: WixClientType , isLoggedIn: boolean) => Promise<void>;
   addItem: (
-    wixClient: WixClientType,
+    wixClient: WixClientType ,
     productId: string,
     variantId: string,
     quantity: number,
-    isLoggedIn: boolean
+    isLoggedIn: boolean,
   ) => Promise<void>;
 
-  removeItem: (itemId: string, wixClient: WixClientType) => Promise<void>;
+  removeItem: (wixClient: WixClientType, itemId: string) => Promise<void>;
   resetCart: (wixClient: WixClientType) => Promise<void>;
   moveGuestCartToUser: (wixClient: WixClientType) => Promise<void>;
 };
 
 export const useCartStore = create<CartState>((set) => ({
-  cart: [] as currentCart.Cart,
+  cart: [] as currentCart.Cart ,
   isLoading: true,
   counter: 0,
 
@@ -155,7 +155,7 @@ export const useCartStore = create<CartState>((set) => ({
       if (lineItemIds.length > 0) {
         const response =
           await wixClient.currentCart.removeLineItemsFromCurrentCart(
-            lineItemIds
+            lineItemIds,
           );
 
         set({

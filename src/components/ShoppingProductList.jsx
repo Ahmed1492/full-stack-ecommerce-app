@@ -12,6 +12,7 @@ export default function ShoppingProductList() {
 
   useEffect(() => {
     moveGuestCartToUser(wixClient);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
@@ -34,7 +35,13 @@ export default function ShoppingProductList() {
   if (!cart?.lineItems?.length) {
     return (
       <div className="flex flex-col items-center gap-3 py-6 text-gray-400">
-        <Image src="/cart2.svg" alt="" width={40} height={40} className="opacity-30" />
+        <Image
+          src="/cart2.svg"
+          alt=""
+          width={40}
+          height={40}
+          className="opacity-30"
+        />
         <p className="text-sm">Your cart is empty</p>
       </div>
     );

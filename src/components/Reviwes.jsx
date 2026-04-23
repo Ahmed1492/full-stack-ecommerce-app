@@ -97,6 +97,7 @@ export default function Reviwes({ productId, user, product }) {
     getReviews();
     isUserComment();
     checkUserOrdered();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const avgRating = reviews.length

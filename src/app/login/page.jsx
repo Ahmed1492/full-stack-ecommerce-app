@@ -248,7 +248,7 @@ export default function LoginPage() {
           {/* Mode switcher */}
           <div className="mt-6 text-center text-sm text-gray-500">
             {mode === "login" && (
-              <>Don't have an account?{" "}
+              <>Don&apos;t have an account?{" "}
                 <button onClick={() => { setMode("register"); setError(""); setMessage(""); }}
                   className="text-[#D02E64] font-semibold hover:underline">Sign up</button>
               </>

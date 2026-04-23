@@ -43,7 +43,7 @@ export default async function OrderPage({ params }) {
       <div className="min-h-[70vh] flex flex-col items-center justify-center gap-4 text-gray-400">
         <span className="text-6xl">📦</span>
         <h2 className="text-xl font-bold text-gray-700">Order not found</h2>
-        <p className="text-sm">This order doesn't exist or may have been removed.</p>
+        <p className="text-sm">This order doesn&apos;t exist or may have been removed.</p>
         <Link href="/profile" className="mt-2 px-5 py-2.5 bg-[#D02E64] text-white text-sm font-semibold rounded-xl hover:bg-[#b02555] transition">
           Back to My Orders
         </Link>

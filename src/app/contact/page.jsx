@@ -21,7 +21,7 @@ export default function ContactPage() {
         <p className="text-pink-200 text-sm font-medium mb-2 uppercase tracking-widest">Get in Touch</p>
         <h1 className="text-4xl font-bold text-white mb-3">Contact Us</h1>
         <p className="text-pink-100 text-sm max-w-md">
-          Have a question or need help? We're here for you. Reach out and we'll get back to you as soon as possible.
+          Have a question or need help? We&apos;re here for you. Reach out and we&apos;ll get back to you as soon as possible.
         </p>
       </div>
 

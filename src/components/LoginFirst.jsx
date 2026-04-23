@@ -8,6 +8,7 @@ export default function LoginFirst() {
 
   useEffect(() => {
     router.push("/login");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <div className=" my-[4rem] text-xl">Loggin First!</div>;
 }

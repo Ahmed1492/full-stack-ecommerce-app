@@ -63,7 +63,7 @@ export default function DealsPage() {
         <p className="text-pink-200 text-sm font-medium mb-2 uppercase tracking-widest">Limited Time</p>
         <h1 className="text-4xl font-bold text-white mb-3">Hot Deals 🔥</h1>
         <p className="text-pink-100 text-sm max-w-md">
-          Exclusive discounts and offers updated weekly. Grab them before they're gone.
+          Exclusive discounts and offers updated weekly. Grab them before they&apos;re gone.
         </p>
       </div>
 

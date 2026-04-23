@@ -16,6 +16,7 @@ export default function Notifications({ onClose }) {
 
   useEffect(() => {
     if (isLoggedIn) getNotifications();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn]);
 
   const items = isLoggedIn ? notifications : [];
@@ -24,7 +25,7 @@ export default function Notifications({ onClose }) {
     return (
       <div className="flex flex-col gap-3 animate-pulse w-72">
         {[...Array(2)].map((_, i) => (
-          <div key={i} className="flex gap-3 items-center">
+          <div key={i } className="flex gap-3 items-center">
             <div className="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0" />
             <div className="flex-1 flex flex-col gap-1.5">
               <div className="h-3 bg-gray-100 rounded w-3/4" />

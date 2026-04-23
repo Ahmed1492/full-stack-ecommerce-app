@@ -27,7 +27,7 @@ export default function CartPage() {
       <div className="min-h-[70vh] flex flex-col items-center justify-center gap-4 text-center px-4">
         <Image src="/cart2.svg" alt="" width={64} height={64} className="opacity-30" />
         <h2 className="text-2xl font-bold text-gray-800">Your cart is empty</h2>
-        <p className="text-gray-400 text-sm">Looks like you haven't added anything yet.</p>
+        <p className="text-gray-400 text-sm">Looks like you haven&apos;t added anything yet.</p>
         <Link
           href="/list"
           className="mt-2 px-6 py-3 bg-[#D02E64] text-white rounded-xl text-sm font-medium hover:bg-[#b02555] transition"
