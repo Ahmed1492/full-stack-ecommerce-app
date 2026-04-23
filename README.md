@@ -6,8 +6,7 @@ A full-featured, production-ready **online shopping platform** built with **Next
 
 🔗 **[trenova-git-main-ahmed1492s-projects.vercel.app](https://trenova-git-main-ahmed1492s-projects.vercel.app/)**
 
-> Previous demo: https://www.linkedin.com/posts/activity-7342732677650812928-Jbv-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD-hKsAB1QXZ1eSyBx8nGWP48RuYiBX5Bdg--
-
+🔗 **[Recorded Demo](https://www.linkedin.com/posts/activity-7342732677650812928-Jbv-)**
 ---
 
 ## ✨ Features
